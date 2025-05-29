@@ -68,7 +68,7 @@
             font-weight: 600;
             flex-shrink: 0; /* Impede que o número encolha */
         }
-        /* Estilo para conteúdo de treino (simulando PDF) */
+        /* Estilo para conteúdo de treino */
         .training-module-content {
             background-color: #ffffff; /* white */
             padding: 1.5rem; /* p-6 */
@@ -157,8 +157,10 @@
                     
                     <div class="mt-6 space-y-3">
                         <details class="bg-slate-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md">Módulo 1: Dominando a Sondagem</summary>
-                            <div class="training-module-content">
+                            <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md flex justify-between items-center">
+                                Módulo 1: Dominando a Sondagem
+                                </summary>
+                            <div class="training-module-content" id="module1-content">
                                 <h3>Módulo 1: Dominando a Sondagem Estratégica</h3>
                                 <p><strong>Objetivo:</strong> Capacitar o consultor a realizar uma sondagem profunda e eficaz, identificando as reais necessidades, dores e sonhos do cliente (responsável) e do futuro aluno, para construir uma base sólida para a apresentação da solução Passaporte Edu.</p>
 
@@ -229,8 +231,10 @@
                             </div>
                         </details>
                         <details class="bg-slate-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md">Módulo 2: Apresentação de Impacto da Passaporte Edu</summary>
-                             <div class="training-module-content">
+                             <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md flex justify-between items-center">
+                                Módulo 2: Apresentação de Impacto da Passaporte Edu
+                                </summary>
+                             <div class="training-module-content" id="module2-content">
                                 <h3>Módulo 2: Apresentação de Impacto da Passaporte Edu</h3>
                                 <p><strong>Objetivo:</strong> Capacitar o consultor a apresentar a Passaporte Edu e seus cursos de forma envolvente, persuasiva e conectada às necessidades identificadas na sondagem, utilizando storytelling e gatilhos mentais de forma eficaz.</p>
 
@@ -286,8 +290,10 @@
                             </div>
                         </details>
                          <details class="bg-slate-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md">Módulo 3: Superando Objeções Comuns</summary>
-                            <div class="training-module-content">
+                             <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md flex justify-between items-center">
+                                Módulo 3: Superando Objeções Comuns
+                                </summary>
+                            <div class="training-module-content" id="module3-content">
                                 <h3>Módulo 3: Superando Objeções Comuns</h3>
                                 <p><strong>Objetivo:</strong> Preparar o consultor para lidar com as objeções mais frequentes de forma confiante e estratégica, transformando-as em oportunidades para reforçar o valor da Passaporte Edu e avançar no processo de fechamento.</p>
 
@@ -376,26 +382,26 @@
                     </li>
                     <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
                          <div class="ml-1 flex-1">
-                            <h3 class="font-semibold text-slate-700 text-md">Apresentação de Valores (Pavão)</h3>
-                            <p class="text-slate-600 text-sm mt-1">Apresente os valores de referência (mais altos) para ancoragem. Destaque o valor percebido e os benefícios inclusos, <strong class="text-slate-700">sem revelar o valor final com desconto ainda.</strong></p>
+                            <h3 class="font-semibold text-slate-700 text-md">Apresentação de Valores (Pavão / Valor Social de Referência)</h3>
+                            <p class="text-slate-600 text-sm mt-1">Apresente o "Valor Social" de referência (valor mais alto) para ancoragem. Destaque o valor percebido e os benefícios inclusos, <strong class="text-slate-700">sem revelar o valor final com desconto ainda.</strong></p>
                         </div>
                     </li>
                     <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
                          <div class="ml-1 flex-1">
                             <h3 class="font-semibold text-slate-700 text-md">Fechamento com Intervenção do Líder/Gerente (Obrigatório)</h3>
-                            <p class="text-slate-600 text-sm mt-1">Recapitule os pontos chave da sondagem, reforce a importância do investimento. <strong class="text-slate-700">É obrigatório chamar o Líder/Gerente Comercial neste momento.</strong> O consultor explica a situação e o report da sondagem ao líder. O líder entra na sala, reforça os benefícios e <strong class="text-slate-700">apresenta a condição especial (desconto padrão).</strong></p>
+                            <p class="text-slate-600 text-sm mt-1">Recapitule os pontos chave da sondagem, reforce a importância do investimento. <strong class="text-slate-700">É obrigatório chamar o Líder/Gerente Comercial neste momento.</strong> O consultor explica a situação e o report da sondagem ao líder. O líder entra na sala, reforça os benefícios e <strong class="text-slate-700">apresenta o "Valor Social" final (condição especial/desconto padrão) para o curso.</strong></p>
                         </div>
                     </li>
                     <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
                          <div class="ml-1 flex-1">
                             <h3 class="font-semibold text-slate-700 text-md">Preenchimento da Pré-Matrícula</h3>
-                            <p class="text-slate-600 text-sm mt-1">Com o acordo verbal após a intervenção do líder, proceda com o preenchimento da pré-matrícula. Mantenha o entusiasmo e parabenize pela decisão. <strong class="text-slate-700">Neste momento, apresente formalmente o material didático como parte essencial e obrigatória do curso, explicando seu valor e a necessidade do pagamento (pelo menos o inicial) no ato.</strong></p>
+                            <p class="text-slate-600 text-sm mt-1">Com o acordo verbal sobre o "Valor Social" do curso após a intervenção do líder, proceda com o preenchimento da pré-matrícula. Mantenha o entusiasmo e parabenize pela decisão. <strong class="text-slate-700">Importante: Nenhum valor de matrícula ou mensalidade é cobrado neste ato. A primeira parcela do curso será paga apenas após 30 dias.</strong></p>
                         </div>
                     </li>
                     <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
                          <div class="ml-1 flex-1">
-                            <h3 class="font-semibold text-slate-700 text-md">Passagem de Cartão (Pagamento do Material Inicial e/ou Curso)</h3>
-                            <p class="text-slate-600 text-sm mt-1">Conduza o momento do pagamento (referente ao material didático inicial e/ou valor do curso, conforme acordado) com naturalidade e profissionalismo. Tenha as opções de pagamento claras.</p>
+                            <h3 class="font-semibold text-slate-700 text-md">Passagem de Cartão (Pagamento do Material Didático Obrigatório)</h3>
+                            <p class="text-slate-600 text-sm mt-1">Após o preenchimento da pré-matrícula, apresente formalmente o material didático como parte essencial e obrigatória do curso. Explique seu valor e a necessidade do pagamento integral do material no ato. Conduza o momento do pagamento com naturalidade. <strong class="text-slate-700">EM ÚLTIMO CASO, se o responsável não tiver como pagar o valor cheio do material, o LÍDER COMERCIAL pode oferecer a opção de pagamento apenas do material inicial para garantir a matrícula.</strong> A primeira parcela do curso vence em 30 dias.</p>
                         </div>
                     </li>
                     <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
