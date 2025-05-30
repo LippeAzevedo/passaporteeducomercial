@@ -102,6 +102,12 @@
             font-weight: 600;
             color: #1e40af; 
         }
+        .signature {
+            font-family: 'Brush Script MT', 'Brush Script Std', 'Comic Sans MS', cursive; /* Adicionando fallbacks comuns */
+            font-size: 1.5rem; /* Ajuste o tamanho conforme necessário */
+            color: #1e40af; /* blue-700, ou outra cor desejada */
+            margin-top: 1rem;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -148,6 +154,9 @@
                 </li>
                 <li role="presentation">
                     <button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="script-helper-tab" data-tabs-target="#script-helper" type="button" role="tab" aria-controls="script-helper" aria-selected="false">Script Helper</button>
+                </li>
+                <li id="readme-ceo-nav-item" class="mr-2 hidden" role="presentation">
+                    <button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="readme-ceo-tab" data-tabs-target="#readme-ceo" type="button" role="tab" aria-controls="readme-ceo" aria-selected="false">Leia-me, CEO</button>
                 </li>
             </ul>
         </nav>
@@ -312,12 +321,29 @@
                     </li>
                 </ol>
             </div>
+
+            <div id="readme-ceo" class="content-section" role="tabpanel" aria-labelledby="readme-ceo-tab">
+                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 mb-4">Mensagem para o CEO</h2>
+                <div class="text-slate-700 text-sm md:text-base leading-relaxed space-y-3 bg-slate-50 p-6 rounded-lg shadow">
+                    <p>Olá, Sr. Douglas Peixoto.</p>
+                    <p>Meu nome é Philippe Azevedo. Comecei na Passaporte (ainda era Idiomas) como Street, depois como Consultor e, agora, como professor.</p>
+                    <p>Meu intuito é ser um dos diretores/sócios da Passaporte Edu.</p>
+                    <p>Esta ferramenta é uma materialização de tudo aquilo que aprendi como consultor, e não acho justo que isso seja mantido num cofre, apenas dentro da minha mente.</p>
+                    <p>Por isso, juntei os meus conhecimentos em informática e programação a tudo o que aprendi na área comercial da Passaporte Edu para fazer esta ferramenta tornar-se realidade.</p>
+                    <p>Estou trabalhando nesta ferramenta há 3 meses e espero que seja uma grande ajuda para novos e antigos consultores.</p>
+                    <p>Esta ferramenta é apenas a primeira de muitas inovações que desejo trazer (se for de serventia para a Passaporte, é claro).</p>
+                    <p>Desejo saúde para a nova vida que o senhor trouxe a este mundo e tenho muito a agradecer pelo império que idealizou.</p>
+                    <p>Um grande abraço,</p>
+                    <p class="signature">Philippe Azevedo</p>
+                </div>
+            </div>
+
         </main>
     </div>
 
     <footer class="text-center mt-8 mb-4 text-slate-500 text-xs md:text-sm">
         <p>&copy; <span id="currentYear"></span> Passaporte Edu. Ferramenta de Apoio Comercial.</p>
-        <p class="mt-1">Developed By: Philippe Azevedo - versão 1.2</p>
+        <p class="mt-1">Developed By: Philippe Azevedo - versão 1.4</p>
     </footer>
 
     <script>
@@ -425,7 +451,7 @@
                 rebuttals: [
                     "Entendo que a distância pode ser uma consideração. No entanto, muitos pais vêm de diversas partes da cidade porque reconhecem o valor e os diferenciais que a Passaporte Edu oferece, como [mencionar 1-2 diferenciais chave, ex: chancela Cambridge, foco em tecnologia]. O tempo investido no trajeto é pequeno perto do grande futuro que estamos a construir para o(a) [nome do aluno].",
                     "Compreendo sua preocupação com o deslocamento. Já verificou as opções de transporte público para cá? Temos também [mencionar se há facilidades como estacionamento, horários flexíveis que ajudam com o trânsito, etc.]. Além disso, a qualidade do nosso ensino e a preparação que oferecemos fazem valer a pena cada minuto.",
-                    "Muitos dos nossos alunos aproveitam o tempo de deslocamento para revisar o conteúdo ou ouvir algo produtivo. Pense nisso como um investimento de tempo que trará um retorno imenso para o desenvolvimento do(a) [nome do aluno].", // Removida menção a localização estratégica
+                    "Muitos dos nossos alunos aproveitam o tempo de deslocamento para revisar o conteúdo ou ouvir algo produtivo. Pense nisso como um investimento de tempo que trará um retorno imenso para o desenvolvimento do(a) [nome do aluno].", 
                     "Entendo. Apenas [X] vezes por semana, o(a) [nome do aluno] terá acesso a um ambiente de aprendizado único que o(a) preparará para o futuro. Será que o benefício de um ensino de excelência como o nosso não compensa o esforço do deslocamento?"
                 ]
             },
@@ -446,7 +472,7 @@
                     "Entendo completamente sua cautela, Sra. [Nome do Responsável]. É muito importante escolher bem onde investir na educação do seu filho. Na Passaporte Edu, prezamos pela transparência e pelos resultados. Por isso, temos a chancela de Centro Preparatório Cambridge, um selo internacional que poucas escolas têm, e milhares de alunos satisfeitos que comprovam a qualidade do nosso método.",
                     "Compreendo o seu receio. O que nos diferencia é o nosso compromisso real com o desenvolvimento de cada aluno. Convidamos você a conversar com outros pais de alunos nossos, ou até mesmo agendar uma aula experimental para o(a) [nome do aluno], para que vocês vejam na prática a nossa seriedade e a qualidade do que oferecemos.",
                     "É verdade que existem muitas promessas no mercado. Por isso, focamos em diferenciais concretos: metodologia inovadora, professores qualificados e um currículo voltado para as habilidades que o futuro exige. O nosso maior marketing são os resultados dos nossos alunos. O que especificamente a senhora ouviu que a deixou com essa impressão?",
-                    "Entendo sua preocupação. Na Passaporte Edu, preferimos mostrar a entregar. Nossa reputação é construída sobre a satisfação das famílias que confiam em nós. Que tal conhecer um pouco mais sobre os projetos desenvolvidos por nossos alunos e os depoimentos de quem já passou por aqui?" // Removida menção a Maceió
+                    "Entendo sua preocupação. Na Passaporte Edu, preferimos mostrar a entregar. Nossa reputação é construída sobre a satisfação das famílias que confiam em nós. Que tal conhecer um pouco mais sobre os projetos desenvolvidos por nossos alunos e os depoimentos de quem já passou por aqui?" 
                 ]
             },
             {
@@ -460,7 +486,7 @@
                 ]
             },
             {
-                id: "mercado_trabalho_local", // Mantido genérico, aplicável a qualquer mercado
+                id: "mercado_trabalho_local", 
                 objection: "Será que o curso realmente prepara para o mercado de trabalho daqui?",
                 rebuttals: [
                     "Excelente pergunta, Sra. [Nome do Responsável]! As habilidades que ensinamos na Passaporte Edu, como inglês fluente, domínio de tecnologia, pensamento crítico e empreendedorismo, são universais e altamente valorizadas em qualquer mercado, que está em constante crescimento e buscando profissionais qualificados.",
@@ -500,8 +526,10 @@
         const currentYearSpan = document.getElementById('currentYear');
 
         // --- Elementos do DOM (Abas) ---
-        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabButtons = document.querySelectorAll('.tab-button'); // Query inicial
         const contentSections = document.querySelectorAll('.content-section');
+        const readmeCeoNavItem = document.getElementById('readme-ceo-nav-item');
+
 
         // --- Funções (Login) ---
         function handleLogin(event) {
@@ -509,12 +537,27 @@
             const username = loginForm.username.value.trim().toLowerCase(); 
             const password = loginForm.password.value;
 
+            // Esconde a aba do CEO por padrão para outros usuários ou se o login falhar
+            if (readmeCeoNavItem) readmeCeoNavItem.classList.add('hidden');
+
+
             if (validUsers[username] && validUsers[username] === password) {
                 loginScreen.classList.add('hidden');
                 mainAppContent.classList.remove('hidden');
                 document.body.classList.remove('justify-center');
                 document.body.classList.add('justify-start', 'pt-6', 'md:pt-10');
                 if (loginError) loginError.classList.add('hidden');
+
+                if (username === 'douglaspeixoto') {
+                    if (readmeCeoNavItem) readmeCeoNavItem.classList.remove('hidden');
+                }
+                 // Certifique-se de que a primeira aba visível seja ativada
+                const firstVisibleTabButton = document.querySelector('.tab-button:not(.hidden)');
+                if (firstVisibleTabButton) {
+                    switchTab(firstVisibleTabButton.getAttribute('data-tabs-target').substring(1));
+                }
+
+
             } else {
                 if (loginError) {
                     loginError.textContent = 'Utilizador ou senha inválidos.';
@@ -578,8 +621,10 @@
                     section.classList.remove('active');
                 }
             });
-
-            tabButtons.forEach(button => {
+            
+            // Seleciona apenas os botões de aba que NÃO estão escondidos
+            const visibleTabButtons = document.querySelectorAll('.tab-button:not(.hidden)'); 
+            visibleTabButtons.forEach(button => {
                 if (button.getAttribute('data-tabs-target') === `#${targetId}`) {
                     button.classList.remove('tab-inactive');
                     button.classList.add('tab-active');
@@ -602,13 +647,18 @@
                 displayRebuttals(event.target.value);
             });
         }
-
-        tabButtons.forEach(button => {
+        
+        // Atualiza o event listener para selecionar todos os botões de aba, incluindo o do CEO se visível
+        document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
-                const targetId = button.getAttribute('data-tabs-target').substring(1); 
-                switchTab(targetId);
+                // Só processa o clique se o botão não estiver escondido (relevante para a aba do CEO)
+                if (!button.parentElement.classList.contains('hidden')) {
+                    const targetId = button.getAttribute('data-tabs-target').substring(1); 
+                    switchTab(targetId);
+                }
             });
         });
+
 
         // --- Inicialização ---
         populateObjections(); 
