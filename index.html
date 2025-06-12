@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultoria Comercial - Passaporte Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Estilos Globais e de Componentes Customizados */
@@ -102,22 +103,29 @@
         input:checked + .toggle-bg { @apply bg-blue-600; }
         
         /* Estilos do Manual do Consultor */
-        .manual-module-content { background-color: #ffffff; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-top: 0.75rem; color: #334155; font-size: 0.875rem; line-height: 1.625; }
+        .manual-module-content { background-color: #ffffff; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-top: 0.75rem; color: #334155; font-size: 0.95rem; line-height: 1.7; }
         .dark .manual-module-content { background-color: #1e293b; border-color: #334155; color: #cbd5e1; }
-        .manual-module-content h3 { font-size: 1.125rem; font-weight: 600; color: #1e3a8a; margin-bottom: 0.75rem; }
+        .manual-module-content h3 { font-size: 1.25rem; font-weight: 700; color: #1e3a8a; margin-bottom: 1rem; }
         .dark .manual-module-content h3 { color: #60a5fa; }
-        .manual-module-content h4 { font-size: 1rem; font-weight: 600; color: #1e40af; margin-top: 1rem; margin-bottom: 0.5rem; }
-        .dark .manual-module-content h4 { color: #93c5fd; }
-        .manual-module-content p { margin-bottom: 0.5rem; }
-        .manual-module-content ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.75rem; }
+        .manual-module-content h4 { font-size: 1.1rem; font-weight: 600; color: #1e40af; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 2px solid #dbeafe; padding-bottom: 0.25rem; }
+        .dark .manual-module-content h4 { color: #93c5fd; border-bottom-color: #1e40af;}
+        .manual-module-content p { margin-bottom: 1rem; }
+        .manual-module-content ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 1rem; }
         .manual-module-content strong { font-weight: 600; color: #1e40af; }
         .dark .manual-module-content strong { color: #93c5fd; }
+        .manual-module-content .scenario {
+            background-color: #f0f9ff; /* sky-50 */
+            border-left: 4px solid #3b82f6; /* blue-500 */
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .manual-module-content .scenario {
+             background-color: #1e293b;
+             border-left-color: #60a5fa;
+        }
 
         /* Estilos do Dashboard */
-        .progress-bar { background-color: #e2e8f0; /* slate-200 */ }
-        .dark .progress-bar { background-color: #334155; /* slate-700 */ }
-        .progress-bar-fill { transition: width 0.5s ease-out; }
-        .chart-bar-fill { transition: width 0.5s ease-out; }
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -125,6 +133,11 @@
         }
         input[type=number] {
             -moz-appearance: textfield;
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 250px;
         }
     </style>
 </head>
@@ -176,10 +189,13 @@
         <main>
             <!-- ABA: Dashboard de Desempenho -->
             <div id="dashboard" class="content-section active" role="tabpanel" aria-labelledby="dashboard-tab">
-                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Calculadora de Performance Mensal</h2>
+                 <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100">Visão Geral da Performance</h2>
+                    <button id="edit-numbers-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">Editar Meus Números</button>
+                </div>
                 
-                <!-- Card de Entrada de Dados -->
-                <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md mb-6">
+                <!-- Card de Entrada de Dados (Inicialmente oculto) -->
+                <div id="performance-inputs-container" class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md mb-6 hidden">
                     <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Entrada de Dados do Mês</h3>
                     <div id="performance-inputs" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
@@ -203,32 +219,22 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Card de Metas -->
-                    <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md">
+                    <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md flex flex-col items-center">
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Progresso da Meta</h3>
-                        <div class="flex justify-between items-center mb-2 text-sm font-medium text-slate-600 dark:text-slate-300">
-                            <span id="sales-achieved-text">0</span>
-                            <span id="sales-target-text">0</span>
-                        </div>
-                        <div class="w-full progress-bar rounded-full h-4">
-                            <div id="sales-progress-bar" class="bg-blue-600 h-4 rounded-full progress-bar-fill" style="width: 0%"></div>
-                        </div>
-                        <p id="sales-progress-percent" class="text-right text-sm font-bold text-blue-700 dark:text-blue-400 mt-2">0%</p>
+                        <div class="chart-container"><canvas id="goal-chart"></canvas></div>
+                         <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="goal-details-text">(0 de 20 matrículas)</p>
                     </div>
                     <!-- Card de Conversão -->
-                    <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md">
+                    <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md flex flex-col items-center">
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Taxa de Conversão</h3>
-                        <div class="text-center">
-                            <p class="text-4xl font-bold text-green-600 dark:text-green-400" id="conversion-rate-text">0%</p>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="conversion-details-text">(0 matrículas de 0 visitas)</p>
-                        </div>
+                        <div class="chart-container"><canvas id="conversion-chart"></canvas></div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="conversion-details-text">(0 matrículas de 0 visitas)</p>
                     </div>
                     <!-- Card de Conclusão do Atendimento -->
-                     <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md">
+                     <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md flex flex-col items-center">
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Taxa de Conclusão do Atendimento</h3>
-                        <div class="text-center">
-                            <p class="text-4xl font-bold text-teal-600 dark:text-teal-400" id="closing-rate-text">0%</p>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="closing-details-text">(0 atendimentos de 0 visitas)</p>
-                        </div>
+                        <div class="chart-container"><canvas id="closing-chart"></canvas></div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="closing-details-text">(0 atendimentos de 0 visitas)</p>
                     </div>
                 </div>
             </div>
@@ -286,7 +292,7 @@
 
     <footer class="text-center mt-8 mb-4 text-slate-500 dark:text-slate-400 text-xs md:text-sm">
         <p>&copy; <span id="currentYear"></span> Passaporte Edu. Ferramenta de Apoio Comercial.</p>
-        <p class="mt-1">Developed By: Philippe Azevedo - v2.6</p>
+        <p class="mt-1">Developed By: Philippe Azevedo - v2.7</p>
     </footer>
 
 <script>
@@ -301,13 +307,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const manualModules = [
-        { title: "Apostila 1: A Psicologia da Venda Consultiva", content: `<h3>Apostila 1: A Psicologia da Venda Consultiva</h3><p><strong>Nossa missão não é vender cursos. É construir confiança e guiar os pais numa decisão crucial para o futuro de seus filhos.</strong> A venda consultiva é sobre entender o ser humano à sua frente.</p><h4>A Mentalidade do Consultor de Elite</h4><ul><li><strong>Você é um Guia, não um Vendedor:</strong> Sua postura deve ser de um especialista que está ali para ajudar, ouvir e orientar. A venda é a consequência natural de uma consultoria bem feita.</li><li><strong>Escuta Empática Ativa:</strong> Não ouça apenas as palavras, ouça os sentimentos por trás delas. Uma mãe que diz "ele é tímido" está, na verdade, dizendo "eu tenho medo que meu filho não se encaixe e sofra". Sua resposta deve acolher o sentimento, não apenas o fato.</li><li><strong>Curiosidade Genuína:</strong> Interesse-se de verdade pela história da família. A paixão pelo que você faz transparece e cria uma conexão poderosa.</li></ul>` },
-        { title: "Apostila 2: Sondagem Profunda - O Coração da Venda", content: `<h3>Apostila 2: Sondagem Profunda - O Coração da Venda</h3><p>A sondagem é onde a venda é ganha ou perdida. É o momento de coletar as 'matérias-primas' emocionais que você usará para construir sua argumentação.</p><h4>Técnica do Funil de Perguntas</h4><p>Comece com perguntas abertas e vá aprofundando para as mais específicas e emocionais.</p><ul><li><strong>Nível 1 (Abertas - O Quê?):</strong> "Me conte um pouco sobre o(a) [aluno]. O que ele(a) mais gosta de fazer?"</li><li><strong>Nível 2 (Aprofundamento - Como?):</strong> "Interessante! E como vocês percebem a importância do inglês para o futuro dele(a) na área de [interesse do aluno]?"</li><li><strong>Nível 3 (Emocionais - Por Quê?):</strong> "Entendi. E qual é o maior sonho que a senhora, como mãe, tem para o futuro do(a) [aluno]? O que te deixaria imensamente orgulhosa?"</li></ul><h4>O Poder do Silêncio</h4><p>Após uma pergunta emocional, fique em silêncio. Deixe a mãe pensar e sentir. A resposta que virá será carregada de valor e verdade. É nessa resposta que você encontrará a chave para o fechamento.</p>` },
-        { title: "Apostila 3: Apresentação de Impacto - Pintando o Futuro", content: `<h3>Apostila 3: Apresentação de Impacto - Pintando o Futuro</h3><p>Sua apresentação não deve ser sobre as características dos cursos, mas sobre a <strong>transformação</strong> que eles proporcionam na vida do aluno.</p><h4>Storytelling: A Jornada do Herói</h4><p>O herói da história é o aluno. A Passaporte Edu é o 'mentor' que lhe dará as 'ferramentas mágicas' para vencer os desafios.</p><blockquote>"Imagine o(a) [aluno], que hoje é um pouco tímido, daqui a um ano, aqui na Passaporte Edu, apresentando um projeto de robótica totalmente em inglês para os colegas e para vocês. Imagine o brilho nos olhos e o orgulho que vocês sentirão. É essa a jornada que construímos aqui."</blockquote><h4>Conectando Características a Benefícios Emocionais</h4><ul><li><strong>Característica:</strong> "Somos Centro Preparatório Cambridge." -> <strong>Benefício Emocional:</strong> "Isso significa a <strong>segurança</strong> e a <strong>tranquilidade</strong> de saber que seu filho está recebendo uma educação de padrão internacional, um passaporte que abrirá qualquer porta no futuro."</li><li><strong>Característica:</strong> "Temos cursos de empreendedorismo." -> <strong>Benefício Emocional:</strong> "Isso significa que estamos preparando o(a) [aluno] não para ser um empregado, mas para ser um <strong>protagonista</strong>, alguém capaz de criar suas próprias oportunidades, te dando um <strong>alívio</strong> sobre a instabilidade do mercado de trabalho."</li></ul>`},
-        { title: "Apostila 4: Lidando com Preocupações (Objeções)", content: `<h3>Apostila 4: Lidando com Preocupações (Objeções)</h3><p>Uma objeção não é um "não". É um pedido de mais informações ou de mais segurança. É um sinal de interesse.</p><h4>Valide Antes de Contornar</h4><p>Nunca confronte. Sempre valide o sentimento da mãe. Isso a desarma e a coloca ao seu lado.</p><ul><li><strong>Objeção:</strong> "É muito caro."</li><li><strong>Resposta Errada:</strong> "Mas não é caro pela qualidade que oferecemos." (Confronto)</li><li><strong>Resposta Certa:</strong> "Eu entendo perfeitamente que o investimento é um ponto importante no planejamento da família. É uma decisão que precisa ser bem pensada. E é por isso que quero te mostrar o retorno que este investimento trará..." (Validação + Transição)</li></ul><h4>A Técnica do "Isolamento"</h4><p>Antes de responder a uma objeção, isole-a para saber se é a única preocupação real.</p><blockquote>"Sra. [Nome], entendi a questão do valor. E faz todo sentido. Mas, só para eu entender, se a questão do investimento estivesse resolvida, se ele se encaixasse perfeitamente no seu orçamento, haveria mais alguma coisa que te impediria de tomar essa decisão pelo futuro do(a) [aluno] hoje?"</blockquote><p>Se ela disser "não, seria só isso", você sabe que só precisa focar em justificar o valor. Se ela trouxer outra questão, você descobriu a objeção real.</p>`},
-        { title: "Apostila 5: O Ecossistema Passaporte Edu", content: `<h3>Apostila 5: Vendendo a Formação Completa</h3><p>Nosso maior diferencial é não sermos uma escola de um curso só. Somos um centro de desenvolvimento de habilidades para o século 21.</p><h4>A Trilha do Conhecimento</h4><p>Apresente os eixos (Be Bilingual, Be a Coder, Be a Boss) como uma trilha que se complementa.</p><blockquote>"O que fazemos aqui é único. No 'Be Bilingual', damos ao(à) [aluno] a voz para se comunicar com o mundo. No 'Be a Coder', damos a ele(a) a capacidade de entender e criar a tecnologia que move esse mundo. E no 'Be a Boss', ensinamos ele(a) a ter a atitude e as ferramentas para liderar e transformar ideias em realidade. Uma habilidade potencializa a outra, criando um jovem completo."</blockquote><h4>Identificando Oportunidades de Cross-selling</h4><p>Durante a sondagem, se a mãe menciona que o filho é criativo mas desorganizado, você tem a deixa perfeita.</p><blockquote>"É maravilhoso que ele seja tão criativo! E o nosso curso de Robótica pode ser um canal incrível para essa criatividade. E sabe o que é interessante? Muitos pais combinam a Robótica com o nosso curso de Educação Financeira, porque ensina justamente a organização e o planejamento que transformam a criatividade em projetos concretos. É a união perfeita da inventividade com a disciplina."</blockquote>`},
-        { title: "Apostila 6: A Arte do Fechamento", content: `<h3>Apostila 6: A Arte do Fechamento</h3><p>O fechamento é o momento de transformar a conexão e o valor construídos em um compromisso. O objetivo é fazer a mãe sentir que está tomando a melhor decisão da vida dela pelo filho.</p><h4>O Programa Educacional</h4><p>A condição especial não é um mero desconto. É a inclusão da família em um programa seleto. Isso eleva o status da oferta.</p><blockquote>"Sra. [Nome], pelo padrão de excelência que oferecemos, com a chancela Cambridge e nosso ecossistema completo, nosso Valor Social para esta jornada de desenvolvimento é de [Valor Social]. Porém, para famílias como a sua, que chegam até aqui e demonstram um compromisso real com o futuro do filho, nós temos algo especial. O [Líder] me autorizou a incluir o(a) [aluno] em nosso <strong>Programa de Incentivo Educacional</strong>. Ao aderir a este programa hoje, o investimento se torna [Valor com Desconto]."</blockquote><h4>O Fechamento Presumido</h4><p>Aja como se a decisão já tivesse sido tomada. A dúvida gera dúvida.</p><blockquote>"Parabéns, tenho certeza de que o(a) [aluno] vai amar. Para qual e-mail eu posso enviar a confirmação da pré-matrícula dele(a)?"</blockquote><p>Não pergunte "E então, vamos fechar?". Pergunte "Qual a melhor forma de pagamento?". Direcione a conversa para a ação.</p>`},
-        { title: "Apostila 7: Pós-Venda - O Início do Relacionamento", content: `<h3>Apostila 7: Pós-Venda - O Início do Relacionamento</h3><p>A matrícula não é o fim da sua relação com a família, é o começo. Um cliente satisfeito é sua maior fonte de novos negócios.</p><h4>O Contato de Boas-Vindas</h4><p>Uma semana após o início das aulas, um contato proativo é ouro.</p><blockquote>"Olá, Sra. [Nome], aqui é o [Seu Nome] da Passaporte Edu. Não quero tomar seu tempo, só liguei para saber como foi a primeira semana do(a) [aluno]. Ele(a) se adaptou bem? Está gostando dos colegas e do professor?"</blockquote><p>Este simples ato demonstra cuidado e profissionalismo, e solidifica a certeza da mãe de que fez a escolha certa.</p><h4>Transformando Satisfação em Indicação</h4><p>Quando o feedback for positivo, essa é a hora de agir.</p><blockquote>"Fico genuinamente feliz em ouvir isso! Ver o desenvolvimento deles é o que nos move. Sra. [Nome], a sua experiência positiva é o nosso melhor cartão de visita. Se a senhora tiver amigas que, assim como você, também sonham com um futuro brilhante para os filhos, eu ficaria muito honrado em recebê-las para uma conversa. A indicação de uma mãe satisfeita tem um peso enorme para nós."</blockquote>`},
+        { title: "Apostila 1: A Psicologia da Venda Consultiva", content: `<h3>Apostila 1: A Psicologia da Venda Consultiva</h3><p><strong>Nossa missão não é vender cursos. É construir confiança e guiar os pais numa decisão crucial para o futuro de seus filhos.</strong> A venda consultiva é sobre entender o ser humano à sua frente, suas esperanças e seus medos.</p><h4>A Mentalidade do Consultor de Elite</h4><ul><li><strong>Você é um Guia, não um Vendedor:</strong> Sua postura deve ser de um especialista que está ali para ajudar, ouvir e orientar. A venda é a consequência natural de uma consultoria bem feita. Você não está empurrando um produto, está apresentando uma solução para uma dor ou um sonho que acabou de ouvir.</li><li><strong>Escuta Empática Ativa:</strong> Não ouça apenas as palavras, ouça os sentimentos por trás delas. Uma mãe que diz "ele é tímido" está, na verdade, dizendo "eu tenho medo que meu filho não se encaixe e sofra". Sua resposta deve acolher o sentimento ("Eu entendo completamente essa preocupação...") antes de apresentar a solução.</li><li><strong>Curiosidade Genuína:</strong> Interesse-se de verdade pela história da família. Pergunte sobre os hobbies do aluno, sobre a dinâmica da família. A paixão pelo que você faz transparece quando você demonstra que se importa com as pessoas, não apenas com os números.</li></ul><h4>Na Prática: Traduzindo para a Conversa</h4><div class="scenario"><p>Ao invés de perguntar "Qual curso você procura?", experimente: "Para que eu possa ajudar da melhor forma, me conte um pouco sobre o momento de vida do(a) [aluno]. O que vocês, como pais, mais sonham para o futuro dele(a)?"</p></div>` },
+        { title: "Apostila 2: Sondagem Profunda - O Coração da Venda", content: `<h3>Apostila 2: Sondagem Profunda - O Coração da Venda</h3><p>A sondagem é onde a venda é ganha ou perdida. É o momento de coletar as 'matérias-primas' emocionais que você usará para construir sua argumentação. Sem uma boa sondagem, seus argumentos serão genéricos e sem impacto.</p><h4>Técnica do Funil de Perguntas</h4><p>Comece com perguntas abertas e vá aprofundando para as mais específicas e emocionais. O objetivo é sair do superficial e chegar no 'porquê' da visita.</p><ul><li><strong>Nível 1 (Abertas - O Quê?):</strong> "Me conte um pouco sobre o(a) [aluno]. O que ele(a) mais gosta de fazer na escola e fora dela?"</li><li><strong>Nível 2 (Aprofundamento - Como?):</strong> "Interessante! E como vocês percebem a importância de habilidades como o inglês para o futuro dele(a) nessa área de [interesse do aluno] que você mencionou?"</li><li><strong>Nível 3 (Emocionais - Por Quê?):</strong> "Entendi. E qual é o maior sonho que a senhora, como mãe, tem para o futuro do(a) [aluno]? O que te deixaria imensamente orgulhosa de ver ele(a) conquistando?"</li></ul><h4>O Poder do Silêncio</h4><p>Após uma pergunta emocional, fique em silêncio. Deixe a mãe pensar e sentir. A resposta que virá será carregada de valor e verdade. É nessa resposta que você encontrará a chave para o fechamento. Não tenha medo da pausa; ela demonstra respeito e confiança.</p>` },
+        { title: "Apostila 3: Apresentação de Impacto - Pintando o Futuro", content: `<h3>Apostila 3: Apresentação de Impacto - Pintando o Futuro</h3><p>Sua apresentação não deve ser sobre as características dos cursos, mas sobre a <strong>transformação</strong> que eles proporcionam na vida do aluno. Você não vende aulas de inglês; você vende a confiança de uma apresentação em público, a alegria de um intercâmbio, a segurança de um bom emprego.</p><h4>Storytelling: A Jornada do Herói</h4><p>O herói da história é o aluno. A Passaporte Edu é o 'mentor' que lhe dará as 'ferramentas mágicas' para vencer os desafios. Use as informações da sondagem para personalizar a história.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Sra. [Nome], lembra que a senhora me disse que seu maior sonho é ver o(a) [aluno] se sentindo mais seguro e confiante? Imagine ele(a), que hoje é um pouco mais reservado, daqui a um ano, aqui na Passaporte Edu, liderando a apresentação de um projeto de robótica que ele mesmo criou, falando em inglês para os colegas e para vocês. Imagine o brilho nos olhos e o orgulho que vocês sentirão ao ver essa evolução. É essa a jornada que construímos aqui."</blockquote></div><h4>Conectando Características a Benefícios Emocionais</h4><ul><li><strong>Característica Técnica:</strong> "Somos Centro Preparatório Cambridge."<br><strong>Benefício Emocional:</strong> "Isso se traduz em <strong>segurança</strong> e <strong>tranquilidade</strong> para a senhora, a certeza de que seu filho está recebendo uma educação de padrão internacional, um verdadeiro passaporte que abrirá qualquer porta que ele(a) queira no futuro, sem limites."</li><li><strong>Característica Técnica:</strong> "Temos cursos de empreendedorismo."<br><strong>Benefício Emocional:</strong> "Isso significa que estamos preparando o(a) [aluno] não para ser apenas um bom empregado, mas para ser o <strong>protagonista</strong> da sua própria história, alguém capaz de criar suas próprias oportunidades. É o <strong>alívio</strong> de saber que ele(a) terá as ferramentas para se virar, não importa o cenário econômico."</li></ul>`},
+        { title: "Apostila 4: Lidando com Preocupações (Objeções)", content: `<h3>Apostila 4: Lidando com Preocupações (Objeções)</h3><p>Uma objeção não é um "não". É um pedido de mais informações ou de mais segurança. É um sinal de interesse. Se o cliente não tivesse interesse, ele simplesmente iria embora.</p><h4>Valide Antes de Contornar</h4><p>A regra de ouro. Nunca confronte. Sempre valide o sentimento da mãe. Isso a desarma e a coloca ao seu lado, mostrando que você está ali para ajudar, não para vencer uma discussão.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><ul><li><strong>Objeção:</strong> "Achei o valor um pouco alto."</li><li><strong>Resposta Errada:</strong> "Mas não é caro pela qualidade que oferecemos." (Confronto)</li><li><strong>Resposta Certa:</strong> "Eu entendo perfeitamente que o investimento na educação dos filhos é um ponto importante no planejamento da família. É uma decisão que precisa ser bem pensada. E é exatamente por isso que quero te mostrar o retorno que este investimento trará em forma de oportunidades para o(a) [aluno]..." (Validação + Transição)</li></ul></div><h4>A Técnica do "Isolamento"</h4><p>Antes de responder a uma objeção, isole-a para saber se é a única preocupação real. Isso evita que você resolva um problema e o cliente apresente outro em seguida.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Sra. [Nome], entendi a questão do valor. E faz todo sentido. Mas, só para eu entender, se a questão do investimento estivesse resolvida, se ele se encaixasse perfeitamente no seu orçamento, haveria mais alguma coisa que te impediria de tomar essa decisão pelo futuro do(a) [aluno] hoje?"</blockquote><p>Se ela disser "não, seria só isso", você sabe que só precisa focar em justificar o valor. Se ela trouxer outra questão ("Ah, também tenho que ver a questão do tempo..."), você descobriu a objeção real que talvez estivesse por trás da primeira.</p></div>`},
+        { title: "Apostila 5: O Ecossistema Passaporte Edu", content: `<h3>Apostila 5: Vendendo a Formação Completa</h3><p>Nosso maior diferencial é não sermos uma escola de um curso só. Somos um centro de desenvolvimento de habilidades para o século 21. A venda mais eficaz é a que mostra como nossas diferentes áreas se conectam para formar um jovem completo.</p><h4>A Trilha do Conhecimento</h4><p>Apresente os eixos (Be Bilingual, Be a Coder, Be a Boss) como uma trilha que se complementa. Não venda produtos, venda um projeto de vida.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"O que fazemos aqui, Sra. [Nome], é único. No 'Be Bilingual', damos ao(à) [aluno] a voz para se comunicar com o mundo. No 'Be a Coder', damos a ele(a) a capacidade de entender e criar a tecnologia que move esse mundo. E no 'Be a Boss', ensinamos ele(a) a ter a atitude e as ferramentas para liderar e transformar ideias em realidade. Uma habilidade potencializa a outra, criando um jovem preparado para qualquer desafio que a vida apresentar."</blockquote></div><h4>Identificando Oportunidades de Cross-selling</h4><p>Durante a sondagem, se a mãe menciona que o filho é criativo mas desorganizado, você tem a deixa perfeita para conectar dois de nossos pilares.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"É maravilhoso que ele seja tão criativo! E o nosso curso de Robótica pode ser um canal incrível para essa criatividade. E sabe o que é interessante? Muitos pais combinam a Robótica com o nosso curso de Educação Financeira, porque ele ensina justamente a organização e o planejamento que transformam a criatividade em projetos concretos. É a união perfeita da inventividade com a disciplina para que as ideias dele saiam do papel."</blockquote></div>`},
+        { title: "Apostila 6: A Arte do Fechamento", content: `<h3>Apostila 6: A Arte do Fechamento</h3><p>O fechamento é o momento de transformar a conexão e o valor construídos em um compromisso. O objetivo é fazer a mãe sentir que está tomando a melhor decisão da vida dela pelo filho. Você deve conduzir essa etapa com segurança e tranquilidade.</p><h4>O Programa Educacional</h4><p>A condição especial não é um mero desconto. É a inclusão da família em um programa seleto. Isso eleva o status da oferta e cria um senso de pertencimento e oportunidade única.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Sra. [Nome], pelo padrão de excelência que oferecemos, com a chancela Cambridge e nosso ecossistema completo, nosso Valor Social para esta jornada de desenvolvimento é de [Valor Social]. Porém, para famílias como a sua, que chegam até aqui e demonstram um compromisso real com o futuro do filho, nós temos algo especial. O [Líder] me autorizou a incluir o(a) [aluno] em nosso <strong>Programa de Incentivo Educacional</strong>. Ao aderir a este programa hoje, o investimento se torna [Valor com Desconto]."</blockquote></div><h4>O Fechamento Presumido</h4><p>Aja como se a decisão já tivesse sido tomada. A dúvida gera dúvida. Após apresentar o valor, não pergunte "E então, vamos fechar?". Direcione a conversa para a próxima ação concreta.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Parabéns, tenho certeza de que o(a) [aluno] vai amar. Para qual e-mail eu posso enviar a confirmação da pré-matrícula dele(a)?"</blockquote><p>Outros exemplos: "O nome completo para a matrícula é [Nome Completo do Aluno], correto?" ou "Qual a melhor forma de pagamento para o material didático, cartão de crédito ou PIX?".</p></div>`},
+        { title: "Apostila 7: Pós-Venda - O Início do Relacionamento", content: `<h3>Apostila 7: Pós-Venda - O Início do Relacionamento</h3><p>A matrícula não é o fim da sua relação com a família, é o começo. Um cliente satisfeito é sua maior fonte de novos negócios (indicações) e um testemunho vivo da qualidade do seu trabalho.</p><h4>O Contato de Boas-Vindas</h4><p>Uma semana após o início das aulas, um contato proativo é ouro. Mostra que você não estava interessado apenas na venda, mas no sucesso do aluno.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Olá, Sra. [Nome], aqui é o [Seu Nome] da Passaporte Edu. Não quero tomar seu tempo, só liguei para saber como foi a primeira semana do(a) [aluno]. Ele(a) se adaptou bem? Está gostando dos colegas e do professor?"</blockquote><p>Este simples ato demonstra cuidado e profissionalismo, e solidifica a certeza da mãe de que fez a escolha certa.</p></div><h4>Transformando Satisfação em Indicação</h4><p>Quando o feedback for positivo, essa é a hora de agir. O cliente está feliz e propenso a compartilhar essa felicidade.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Fico genuinamente feliz em ouvir isso! Ver o desenvolvimento deles é o que nos move. Sra. [Nome], a sua experiência positiva é o nosso melhor cartão de visita. Inclusive, se a senhora tiver amigas que, assim como você, também sonham com um futuro brilhante para os filhos, eu ficaria muito honrado em recebê-las para uma conversa. A indicação de uma mãe satisfeita tem um peso enorme para nós e temos um programa especial de agradecimento por isso."</blockquote></div>`},
     ];
 
     const scriptSteps = [
@@ -347,15 +353,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const htmlTag = document.documentElement;
     // Dashboard elements
+    const editNumbersBtn = document.getElementById('edit-numbers-btn');
+    const performanceInputsContainer = document.getElementById('performance-inputs-container');
     const performanceInputs = document.getElementById('performance-inputs');
-    const salesAchievedText = document.getElementById('sales-achieved-text');
-    const salesTargetText = document.getElementById('sales-target-text');
-    const salesProgressBar = document.getElementById('sales-progress-bar');
-    const salesProgressPercent = document.getElementById('sales-progress-percent');
-    const conversionRateText = document.getElementById('conversion-rate-text');
+    const goalDetailsText = document.getElementById('goal-details-text');
     const conversionDetailsText = document.getElementById('conversion-details-text');
-    const closingRateText = document.getElementById('closing-rate-text');
     const closingDetailsText = document.getElementById('closing-details-text');
+
+    // Chart instances
+    let goalChart, conversionChart, closingChart;
 
     // =================================================================================
     // FUNÇÕES DA APLICAÇÃO
@@ -393,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDark = darkModeToggle.checked;
         localStorage.setItem('darkMode', isDark);
         applyDarkMode(isDark);
+        renderDashboard(); // Re-render charts with new theme colors
     }
 
     function getPersonalizedText(text) {
@@ -511,23 +518,95 @@ document.addEventListener('DOMContentLoaded', () => {
         const achieved = parseInt(document.getElementById('achieved-input').value) || 0;
         const visits = parseInt(document.getElementById('visits-input').value) || 0;
         const closings = parseInt(document.getElementById('closings-input').value) || 0;
-
-        // Meta Progress Calculation
-        const progress = target > 0 ? Math.min((achieved / target) * 100, 100) : 0;
-        salesAchievedText.textContent = `${achieved} matrículas`;
-        salesTargetText.textContent = `Meta: ${target}`;
-        salesProgressBar.style.width = `${progress}%`;
-        salesProgressPercent.textContent = `${progress.toFixed(0)}%`;
-
-        // Conversion Rate Calculation
-        const conversionRate = visits > 0 ? (achieved / visits) * 100 : 0;
-        conversionRateText.textContent = `${conversionRate.toFixed(1)}%`;
-        conversionDetailsText.textContent = `(${achieved} matrículas de ${visits} visitas)`;
         
-        // Closing Rate Calculation
+        const isDark = htmlTag.classList.contains('dark');
+        const fontColor = isDark ? '#cbd5e1' : '#475569';
+        Chart.defaults.color = fontColor;
+
+        // Goal Chart
+        const goalProgress = target > 0 ? Math.min((achieved / target) * 100, 100) : 0;
+        goalDetailsText.textContent = `(${achieved} de ${target} matrículas)`;
+        const goalData = {
+            labels: ['Alcançado', 'Faltando'],
+            datasets: [{
+                data: [achieved, Math.max(0, target - achieved)],
+                backgroundColor: ['#2563eb', '#334155'],
+                borderColor: isDark ? '#0f172a' : '#f1f5f9',
+                borderWidth: 5,
+                hoverOffset: 4
+            }]
+        };
+        if(goalChart) goalChart.destroy();
+        goalChart = new Chart(document.getElementById('goal-chart'), createChartConfig(goalData, `${goalProgress.toFixed(0)}%`));
+        
+        // Conversion Chart
+        const conversionRate = visits > 0 ? (achieved / visits) * 100 : 0;
+        conversionDetailsText.textContent = `(${achieved} matrículas de ${visits} visitas)`;
+        const conversionData = {
+            labels: ['Matrículas', 'Visitas sem Matrícula'],
+            datasets: [{
+                data: [achieved, Math.max(0, visits - achieved)],
+                backgroundColor: ['#16a34a', '#334155'],
+                borderColor: isDark ? '#0f172a' : '#f1f5f9',
+                borderWidth: 5,
+                hoverOffset: 4
+            }]
+        };
+        if(conversionChart) conversionChart.destroy();
+        conversionChart = new Chart(document.getElementById('conversion-chart'), createChartConfig(conversionData, `${conversionRate.toFixed(1)}%`));
+
+        // Closing Chart
         const closingRate = visits > 0 ? (closings / visits) * 100 : 0;
-        closingRateText.textContent = `${closingRate.toFixed(1)}%`;
         closingDetailsText.textContent = `(${closings} atendimentos de ${visits} visitas)`;
+        const closingData = {
+            labels: ['Concluídos', 'Não Concluídos'],
+            datasets: [{
+                data: [closings, Math.max(0, visits - closings)],
+                backgroundColor: ['#0d9488', '#334155'],
+                borderColor: isDark ? '#0f172a' : '#f1f5f9',
+                borderWidth: 5,
+                hoverOffset: 4
+            }]
+        };
+        if(closingChart) closingChart.destroy();
+        closingChart = new Chart(document.getElementById('closing-chart'), createChartConfig(closingData, `${closingRate.toFixed(1)}%`));
+    }
+
+    function createChartConfig(data, centerText) {
+        const isDark = htmlTag.classList.contains('dark');
+        return {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: isDark ? '#334155' : '#475569'
+                    }
+                }
+            },
+            plugins: [{
+                id: 'centerText',
+                beforeDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const centerConfig = {
+                        x: chart.getDatasetMeta(0).data[0].x,
+                        y: chart.getDatasetMeta(0).data[0].y,
+                    };
+                    ctx.save();
+                    ctx.font = 'bold 2rem Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
+                    ctx.fillText(centerText, centerConfig.x, centerConfig.y);
+                    ctx.restore();
+                }
+            }]
+        };
     }
     
     function switchTab(targetId) {
@@ -561,6 +640,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (objectionSelect) objectionSelect.addEventListener('change', (e) => displayRebuttals(e.target.value));
     
     if (performanceInputs) performanceInputs.addEventListener('input', renderDashboard);
+    if (editNumbersBtn) editNumbersBtn.addEventListener('click', () => {
+        performanceInputsContainer.classList.toggle('hidden');
+    });
 
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
