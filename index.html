@@ -1,670 +1,674 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class=""> <!-- A classe 'dark' será adicionada aqui via JS -->
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultoria Comercial - Passaporte Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos Globais e de Componentes Customizados */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f1f5f9; /* slate-100 */
-            transition: background-color 0.3s ease;
         }
-        .dark body {
-            background-color: #0f172a; /* slate-900 */
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-
-        /* Scrollbar Customizada */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-track { background: #1e293b; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-thumb { background: #64748b; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Estilos das Abas de Navegação */
-        .tab-button { transition: color 0.2s ease, border-color 0.2s ease; }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0; /* slate-200 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; /* slate-600 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155; /* slate-700 */
+        }
+        .tab-button {
+            transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
         .tab-active {
-            border-bottom-width: 3px;
-            border-color: #2563eb; /* blue-600 */
+            border-bottom-width: 3px; 
+            border-bottom-color: #2563eb; /* blue-600 */
             color: #2563eb; /* blue-600 */
             font-weight: 600;
         }
-        .dark .tab-active { border-color: #3b82f6; color: #3b82f6; } /* blue-500 */
         .tab-inactive {
-            border-bottom-width: 3px;
-            border-color: transparent;
+            border-bottom-width: 3px; 
+            border-bottom-color: transparent;
             color: #475569; /* slate-600 */
         }
-        .dark .tab-inactive { color: #94a3b8; } /* slate-400 */
         .tab-inactive:hover {
             color: #1e40af; /* blue-800 */
             border-bottom-color: #93c5fd; /* blue-300 */
         }
-        .dark .tab-inactive:hover { color: #60a5fa; border-bottom-color: #1e40af; } /* blue-400, blue-800 */
-
-        /* Animação e Visibilidade de Conteúdo */
-        .content-section { display: none; }
-        .content-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .rebuttal-card, .dashboard-card, .script-example { animation: slideInUp 0.4s ease-out; }
-        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Estilos do "Jornada do Atendimento" e "Leia-me, CEO" */
-        .signature { font-family: 'Brush Script MT', 'Brush Script Std', 'Comic Sans MS', cursive; font-size: 1.5rem; color: #1e40af; margin-top: 1rem; }
-        .dark .signature { color: #60a5fa; }
-        
-        .script-step-content {
-            background-color: #f8fafc; /* slate-50 */
-            border: 1px solid #e2e8f0; /* slate-200 */
-            padding: 1rem 1.5rem;
-            margin-top: 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
+        .content-section {
+            display: none;
         }
-        .dark .script-step-content {
-            background-color: #1e293b; /* slate-800 */
-            border-color: #334155; /* slate-700 */
+        .content-section.active {
+            display: block;
         }
-        .script-step-content h4 {
+        .step-item {
+            counter-increment: step-counter; 
+        }
+        .step-item::before {
+            content: counter(step-counter); 
+            margin-right: 0.75rem; 
+            background-color: #2563eb; /* blue-600 */
+            color: white;
+            width: 2rem; 
+            height: 2rem; 
+            border-radius: 9999px; /* rounded-full */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 600;
-            color: #1d4ed8; /* blue-700 */
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
+            flex-shrink: 0; 
         }
-        .dark .script-step-content h4 { color: #60a5fa; /* blue-400 */ }
-        .script-step-content h5 {
+        .training-module-content {
+            background-color: #ffffff; 
+            padding: 1.5rem; 
+            border-radius: 0.5rem; 
+            border: 1px solid #e2e8f0; 
+            margin-top: 0.75rem; 
+            color: #334155; 
+            font-size: 0.875rem; 
+            line-height: 1.625; 
+        }
+        .training-module-content h3 {
+            font-size: 1.125rem; 
+            font-weight: 600; 
+            color: #1e3a8a; 
+            margin-bottom: 0.75rem; 
+        }
+         .training-module-content h4 {
+            font-size: 1rem; 
+            font-weight: 600; 
+            color: #1e40af; 
+            margin-top: 1rem; 
+            margin-bottom: 0.5rem; 
+        }
+        .training-module-content p {
+            margin-bottom: 0.5rem; 
+        }
+        .training-module-content ul {
+            list-style-type: disc;
+            margin-left: 1.25rem; 
+            margin-bottom: 0.75rem; 
+        }
+         .training-module-content strong {
             font-weight: 600;
-            color: #1e40af; /* blue-800 */
+            color: #1e40af; 
+        }
+        .signature {
+            font-family: 'Brush Script MT', 'Brush Script Std', 'Comic Sans MS', cursive;
+            font-size: 1.5rem;
+            color: #1e40af;
             margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .dark .script-step-content h5 { color: #93c5fd; }
-        .script-step-content blockquote {
-            border-left: 4px solid #93c5fd; /* blue-300 */
-            padding-left: 1rem;
-            margin: 0.5rem 0;
-            font-style: italic;
-            color: #475569; /* slate-600 */
-        }
-        .dark .script-step-content blockquote {
-            border-left-color: #3b82f6; /* blue-500 */
-            color: #94a3b8; /* slate-400 */
-        }
-
-        /* Estilos do Modo Escuro (Dark Mode Toggle) */
-        .toggle-bg:after { content: ''; @apply absolute top-0.5 left-0.5 bg-white border border-gray-300 rounded-full h-5 w-5 transition shadow-sm; }
-        input:checked + .toggle-bg:after { transform: translateX(100%); @apply border-white; }
-        input:checked + .toggle-bg { @apply bg-blue-600; }
-        
-        /* Estilos do Manual do Consultor */
-        .manual-module-content { background-color: #ffffff; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-top: 0.75rem; color: #334155; font-size: 0.95rem; line-height: 1.7; }
-        .dark .manual-module-content { background-color: #1e293b; border-color: #334155; color: #cbd5e1; }
-        .manual-module-content h3 { font-size: 1.25rem; font-weight: 700; color: #1e3a8a; margin-bottom: 1rem; }
-        .dark .manual-module-content h3 { color: #60a5fa; }
-        .manual-module-content h4 { font-size: 1.1rem; font-weight: 600; color: #1e40af; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 2px solid #dbeafe; padding-bottom: 0.25rem; }
-        .dark .manual-module-content h4 { color: #93c5fd; border-bottom-color: #1e40af;}
-        .manual-module-content p { margin-bottom: 1rem; }
-        .manual-module-content ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 1rem; }
-        .manual-module-content strong { font-weight: 600; color: #1e40af; }
-        .dark .manual-module-content strong { color: #93c5fd; }
-        .manual-module-content .scenario {
-            background-color: #f0f9ff; /* sky-50 */
-            border-left: 4px solid #3b82f6; /* blue-500 */
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0.25rem;
-        }
-        .dark .manual-module-content .scenario {
-             background-color: #1e293b;
-             border-left-color: #60a5fa;
-        }
-
-        /* Estilos do Dashboard */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-        .chart-container {
-            position: relative;
-            height: 250px;
-            width: 250px;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="flex flex-col items-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <!-- Tela de Login -->
-    <div id="login-screen" class="bg-white dark:bg-slate-800 shadow-2xl rounded-xl p-8 md:p-12 w-full max-w-md flex flex-col items-center">
-        <img src="https://www.passaporteedu.com.br/images/logotipo_slogan.svg" alt="Logo Passaporte Edu" class="mx-auto h-20 mb-8" onerror="this.src='https://placehold.co/300x80/e2e8f0/475569?text=Passaporte+Edu'"/>
-        <h2 class="text-2xl font-bold text-center text-blue-700 dark:text-blue-400 mb-2">Acesso Restrito</h2>
-        <p class="text-center text-slate-600 dark:text-slate-400 mb-8">Ferramenta de Apoio Comercial</p>
-        <form id="login-form" class="w-full">
+    <div id="login-screen" class="bg-white shadow-2xl rounded-xl p-8 md:p-12 w-full max-w-md">
+        <img src="https://www.passaporteedu.com.br/images/logotipo_slogan.svg" alt="Logo Passaporte Edu" class="mx-auto h-20 mb-8" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('afterbegin', '<p class=\'text-sm text-red-500\'>Logo não pôde ser carregado.</p><div class=\'w-full h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 mb-4\'>Logo Passaporte Edu</div>');" />
+        <h2 class="text-2xl font-bold text-center text-blue-700 mb-2">Acesso Restrito</h2>
+        <p class="text-center text-slate-600 mb-8">Ferramenta de Apoio Comercial</p>
+        
+        <form id="login-form">
             <div class="mb-4">
-                <label for="username" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Utilizador</label>
-                <input type="text" id="username" name="username" required class="w-full p-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-slate-900 dark:text-slate-100">
+                <label for="username" class="block text-sm font-medium text-slate-700 mb-1">Utilizador</label>
+                <input type="text" id="username" name="username" required
+                       class="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
             </div>
             <div class="mb-6">
-                <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Senha</label>
-                <input type="password" id="password" name="password" required class="w-full p-3 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-slate-900 dark:text-slate-100">
+                <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Senha</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
             </div>
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg shadow-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-blue-500">Entrar</button>
+            <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg shadow-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Entrar
+            </button>
             <p id="login-error" class="text-red-500 text-sm text-center mt-4 hidden"></p>
         </form>
     </div>
 
-    <!-- Conteúdo Principal da Aplicação -->
-    <div id="main-app-content" class="bg-white dark:bg-slate-800 shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-5xl hidden">
-        <header class="text-center mb-6 relative">
-            <img src="https://www.passaporteedu.com.br/images/logotipo_slogan.svg" alt="Logo Passaporte Edu" class="mx-auto h-16 md:h-20 mb-4" onerror="this.src='https://placehold.co/300x80/e2e8f0/475569?text=Passaporte+Edu'"/>
-            <h1 class="text-2xl md:text-3xl font-bold text-blue-700 dark:text-blue-400">Ferramenta de Apoio Comercial</h1>
-            <p class="text-slate-600 dark:text-slate-400 mt-1 text-base md:text-lg">Olá, <span id="welcome-username" class="font-semibold">Consultor</span>!</p>
-            <!-- Dark Mode Toggle -->
-            <div class="absolute top-0 right-0 flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <label for="dark-mode-toggle" class="flex items-center cursor-pointer"><div class="relative"><input type="checkbox" id="dark-mode-toggle" class="sr-only"><div class="block bg-slate-200 dark:bg-slate-700 w-11 h-6 rounded-full toggle-bg"></div></div></label>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-            </div>
+    <div id="main-app-content" class="bg-white shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-3xl hidden mt-0 md:mt-0">
+        <header class="text-center mb-6">
+            <img src="https://www.passaporteedu.com.br/images/logotipo_slogan.svg" alt="Logo Passaporte Edu" class="mx-auto h-16 md:h-20 mb-4" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('afterbegin', '<p class=\'text-sm text-red-500\'>Logo não pôde ser carregado.</p><div class=\'w-full h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 mb-4\'>Logo Passaporte Edu</div>');" />
+            <h1 class="text-2xl md:text-3xl font-bold text-blue-700">Ferramenta de Apoio Comercial</h1>
+            <p class="text-slate-600 mt-1 text-base md:text-lg">Passaporte Edu</p>
         </header>
-        
-        <nav class="mb-8 border-b border-slate-300 dark:border-slate-600">
+
+        <nav class="mb-8 border-b border-slate-300">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
-                <li class="mr-2" role="presentation"><button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-active" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">Meu Desempenho</button></li>
-                <li class="mr-2" role="presentation"><button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="arguments-tab" data-tabs-target="#arguments" type="button" role="tab" aria-controls="arguments" aria-selected="false">Guia de Argumentos</button></li>
-                <li class="mr-2" role="presentation"><button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="manual-tab" data-tabs-target="#manual" type="button" role="tab" aria-controls="manual" aria-selected="false">Apostilas do Consultor</button></li>
-                <li class="mr-2" role="presentation"><button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="script-helper-tab" data-tabs-target="#script-helper" type="button" role="tab" aria-controls="script-helper" aria-selected="false">Jornada do Atendimento</button></li>
-                <li id="readme-ceo-nav-item" class="mr-2 hidden" role="presentation"><button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="readme-ceo-tab" data-tabs-target="#readme-ceo" type="button" role="tab" aria-controls="readme-ceo" aria-selected="false">Leia-me, CEO</button></li>
+                <li class="mr-2" role="presentation">
+                    <button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-active" id="arguments-tab" data-tabs-target="#arguments" type="button" role="tab" aria-controls="arguments" aria-selected="true">Guia de Argumentos</button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="training-tab" data-tabs-target="#training" type="button" role="tab" aria-controls="training" aria-selected="false">Área de Treino</button>
+                </li>
+                <li role="presentation">
+                    <button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="script-helper-tab" data-tabs-target="#script-helper" type="button" role="tab" aria-controls="script-helper" aria-selected="false">Script Helper</button>
+                </li>
+                <li id="readme-ceo-nav-item" class="mr-2 hidden" role="presentation">
+                    <button class="tab-button inline-block p-3 md:p-4 border-b-2 rounded-t-lg tab-inactive" id="readme-ceo-tab" data-tabs-target="#readme-ceo" type="button" role="tab" aria-controls="readme-ceo" aria-selected="false">Leia-me, CEO</button>
+                </li>
             </ul>
         </nav>
 
         <main>
-            <!-- ABA: Dashboard de Desempenho -->
-            <div id="dashboard" class="content-section active" role="tabpanel" aria-labelledby="dashboard-tab">
-                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100">Visão Geral da Performance</h2>
-                    <button id="edit-numbers-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">Editar Meus Números</button>
+            <div id="arguments" class="content-section active" role="tabpanel" aria-labelledby="arguments-tab">
+                <div class="mb-6">
+                    <label for="objection-select" class="block text-md font-semibold text-slate-700 mb-2">Selecione a Objeção do Cliente:</label>
+                    <select id="objection-select" class="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-slate-700">
+                        <option value="">-- Escolha uma objeção --</option>
+                    </select>
                 </div>
-                
-                <!-- Card de Entrada de Dados (Inicialmente oculto) -->
-                <div id="performance-inputs-container" class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md mb-6 hidden">
-                    <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Entrada de Dados do Mês</h3>
-                    <div id="performance-inputs" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div>
-                            <label for="target-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Meta de Matrículas</label>
-                            <input type="number" id="target-input" value="20" class="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label for="achieved-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Matrículas Alcançadas</label>
-                            <input type="number" id="achieved-input" value="0" class="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label for="visits-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Visitas Realizadas</label>
-                            <input type="number" id="visits-input" value="0" class="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label for="closings-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Atendimentos Concluídos</label>
-                            <input type="number" id="closings-input" value="0" class="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100">
-                        </div>
-                    </div>
+                <div id="selected-objection-container" class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg shadow-sm hidden">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-2">Objeção Selecionada:</h3>
+                    <p id="selected-objection-text" class="text-slate-700 text-sm md:text-base"></p>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Card de Metas -->
-                    <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Progresso da Meta</h3>
-                        <div class="chart-container"><canvas id="goal-chart"></canvas></div>
-                         <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="goal-details-text">(0 de 20 matrículas)</p>
-                    </div>
-                    <!-- Card de Conversão -->
-                    <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Taxa de Conversão</h3>
-                        <div class="chart-container"><canvas id="conversion-chart"></canvas></div>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="conversion-details-text">(0 matrículas de 0 visitas)</p>
-                    </div>
-                    <!-- Card de Conclusão do Atendimento -->
-                     <div class="dashboard-card bg-slate-50 dark:bg-slate-700/60 p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Taxa de Conclusão do Atendimento</h3>
-                        <div class="chart-container"><canvas id="closing-chart"></canvas></div>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="closing-details-text">(0 atendimentos de 0 visitas)</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ABA: Guia de Argumentos -->
-            <div id="arguments" class="content-section" role="tabpanel" aria-labelledby="arguments-tab">
-                <!-- Personalização Dinâmica -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                    <div><label for="student-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome do Aluno(a):</label><input type="text" id="student-name" placeholder="Ex: João" class="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100"></div>
-                    <div><label for="leader-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome do Líder/Gerente:</label><input type="text" id="leader-name" placeholder="Ex: Hugo" class="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100"></div>
-                </div>
-                <div class="mb-4">
-                    <label for="objection-search" class="block text-md font-semibold text-slate-700 dark:text-slate-200 mb-2">Busque ou Selecione a Objeção:</label>
-                    <input type="text" id="objection-search" placeholder="Buscar por palavra-chave... (ex: 'caro', 'tempo')" class="w-full p-3 mb-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-slate-100">
-                </div>
-                <div class="mb-6"><select id="objection-select" class="w-full p-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out text-slate-700 dark:text-slate-300"><option value="">-- Escolha uma objeção --</option></select></div>
-                <div id="selected-objection-container" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/40 rounded-lg shadow-sm hidden"><h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-2">Objeção Selecionada:</h3><p id="selected-objection-text" class="text-slate-700 dark:text-slate-300 text-sm md:text-base"></p></div>
-                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-4 hidden" id="rebuttals-title">Sugestões de Quebra de Objeção:</h2>
+                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 mb-4 hidden" id="rebuttals-title">Sugestões de Quebra de Objeção:</h2>
                 <div id="rebuttals-container" class="space-y-4"></div>
             </div>
 
-            <!-- ABA: Apostilas do Consultor -->
-            <div id="manual" class="content-section" role="tabpanel" aria-labelledby="manual-tab">
-                 <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-4">Apostilas do Consultor Passaporte Edu</h2>
-                <div class="space-y-4 text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed">
-                    <p>Bem-vindo ao seu guia completo para o sucesso. Este material é dedicado ao seu desenvolvimento contínuo como um consultor educacional de elite.</p>
-                    <div id="manual-container" class="mt-6 space-y-3">
-                        <!-- Módulos serão inseridos aqui pelo JS -->
+            <div id="training" class="content-section" role="tabpanel" aria-labelledby="training-tab">
+                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 mb-4">Área de Treino para Consultores</h2>
+                <div class="space-y-4 text-slate-700 text-sm md:text-base leading-relaxed">
+                    <p>Bem-vindo à Área de Treino! Este espaço é dedicado ao seu desenvolvimento contínuo como consultor comercial da Passaporte Edu.</p>
+                    <p>Abaixo, você encontrará o conteúdo dos módulos de treino. Este material pode ser copiado e formatado em documentos PDF para estudo e consulta.</p>
+                    <div class="mt-6 space-y-3">
+                        <details class="bg-slate-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                            <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md flex justify-between items-center">Módulo 1: Dominando a Sondagem</summary>
+                            <div class="training-module-content" id="module1-content">
+                                <h3>Módulo 1: Dominando a Sondagem Estratégica</h3>
+                                <p><strong>Objetivo:</strong> Capacitar o consultor a realizar uma sondagem profunda e eficaz, identificando as reais necessidades, dores e sonhos do cliente (responsável) e do futuro aluno, para construir uma base sólida para a apresentação da solução Passaporte Edu.</p>
+                                <h4>1. A Importância da Sondagem</h4>
+                                <p>A sondagem é o coração da venda consultiva. É nesta etapa que você deixa de ser um mero "apresentador de cursos" e se torna um verdadeiro consultor educacional, entendendo o universo do cliente para oferecer a melhor solução.</p>
+                                <ul><li>Cria conexão e confiança (rapport).</li><li>Descobre as motivações reais para a busca de um curso.</li><li>Identifica problemas que a Passaporte Edu pode resolver.</li><li>Coleta informações cruciais para personalizar a argumentação e os gatilhos mentais.</li><li>Aumenta significativamente as chances de fechamento.</li></ul>
+                                <h4>2. Os Três Pilares da Sondagem Passaporte Edu</h4>
+                                <p>A sondagem deve ser conduzida de forma natural e empática, explorando três esferas principais, nesta ordem:</p>
+                                <h5>2.1. Sondagem Pessoal (Foco no Responsável e no Aluno)</h5>
+                                <p><strong>Objetivo:</strong> Entender o contexto familiar, os valores, as preocupações e os sonhos dos responsáveis em relação ao filho(a).</p>
+                                <p><strong>Perguntas Chave (Exemplos):</strong></p>
+                                <ul><li>"Para começarmos, fale-me um pouco sobre o(a) [nome do aluno]. Quais são os seus principais interesses, hobbies, como ele(a) é no dia a dia?"</li><li>"Quais são os seus maiores sonhos e aspirações para o futuro do(a) [nome do aluno]?"</li><li>"Quais são as suas principais preocupações em relação ao desenvolvimento e preparo dele(a) para o futuro?"</li><li>"Como é a rotina de estudos dele(a) atualmente? Ele(a) demonstra interesse por alguma área específica?"</li><li>"O que vocês mais valorizam na educação e formação de um filho?"</li></ul>
+                                <h5>2.2. Sondagem Educacional (Foco no Aluno)</h5>
+                                <p><strong>Objetivo:</strong> Compreender o histórico escolar, as dificuldades, as facilidades e os objetivos educacionais específicos para o aluno.</p>
+                                <p><strong>Perguntas Chave (Exemplos):</strong></p>
+                                <ul><li>"Como tem sido o desempenho escolar do(a) [nome do aluno]? Existe alguma disciplina ou área em que ele(a) se destaca ou tem mais dificuldade?"</li><li>"Ele(a) já teve alguma experiência com cursos fora da escola regular? Como foi?"</li><li>"Quais habilidades vocês acreditam que seriam mais importantes para ele(a) desenvolver neste momento da vida escolar?" (Ex: inglês, tecnologia, comunicação, organização financeira).</li><li>"Vocês já pensaram sobre a importância de certificações ou diferenciais no currículo dele(a) para o futuro?"</li><li>"Se ele(a) pudesse aprender algo novo e empolgante, o que você acha que seria?"</li></ul>
+                                <h5>2.3. Sondagem Profissional (Foco no Futuro do Aluno e Contexto Familiar)</h5>
+                                <p><strong>Objetivo:</strong> Conectar as aspirações educacionais com o futuro profissional do aluno e entender o impacto que a formação da Passaporte Edu pode ter.</p>
+                                <p><strong>Perguntas Chave (Exemplos):</strong></p>
+                                <ul><li>"Pensando no futuro, quais são as áreas profissionais que vocês ou o(a) [nome do aluno] consideram interessantes?"</li><li>"Vocês percebem como o domínio de um segundo idioma, como o inglês, ou habilidades em tecnologia são cada vez mais exigidos no mercado de trabalho?"</li><li>"De que forma vocês acreditam que um bom preparo em habilidades como empreendedorismo ou educação financeira pode ajudá-lo(a) a ter mais autonomia e sucesso no futuro?"</li><li>"Quais diferenciais vocês buscam numa formação que possa realmente prepará-lo(a) para os desafios e oportunidades que virão?"</li></ul>
+                                <h4>3. Técnicas Essenciais de Sondagem</h4>
+                                <ul><li><strong>Escuta Ativa:</strong> Preste atenção genuína, demonstre interesse, faça contato visual, acene com a cabeça. Não interrompa, a menos que seja para clarificar algo brevemente.</li><li><strong>Perguntas Abertas:</strong> Comece com "Como...", "Por que...", "Fale-me sobre...", "De que forma...". Elas incentivam respostas elaboradas.</li><li><strong>Perguntas Fechadas:</strong> Use para confirmar informações ou obter respostas diretas (Sim/Não). Ex: "Então, a principal dificuldade é com a organização dos estudos, correto?"</li><li><strong>Empatia:</strong> Coloque-se no lugar do cliente. Use frases como "Entendo perfeitamente sua preocupação...", "Imagino como isso é importante para vocês...".</li><li><strong>Parafrasear e Resumir:</strong> "Então, se eu entendi bem, vocês buscam um curso que ajude o(a) [nome do aluno] a..." Isso mostra que você estava ouvindo e confirma o entendimento.</li></ul>
+                                <h4>4. Erros Comuns a Evitar na Sondagem</h4>
+                                <ul><li>Falar mais do que ouvir.</li><li>Fazer perguntas de forma mecânica, como um interrogatório.</li><li>Interromper o cliente constantemente.</li><li>Direcionar as respostas ou fazer perguntas sugestivas.</li><li>Não registrar as informações importantes (mentalmente ou em anotações discretas).</li><li>Pular direto para a apresentação do curso sem entender o cliente.</li></ul>
+                                <p><strong>Lembre-se:</strong> Uma sondagem bem feita é o alicerce de uma venda bem-sucedida. Invista tempo e atenção nesta etapa!</p>
+                            </div>
+                        </details>
+                        <details class="bg-slate-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                             <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md flex justify-between items-center">Módulo 2: Apresentação de Impacto da Passaporte Edu</summary>
+                             <div class="training-module-content" id="module2-content">
+                                <h3>Módulo 2: Apresentação de Impacto da Passaporte Edu</h3>
+                                <p><strong>Objetivo:</strong> Capacitar o consultor a apresentar a Passaporte Edu e seus cursos de forma envolvente, persuasiva e conectada às necessidades identificadas na sondagem, utilizando storytelling e gatilhos mentais de forma eficaz.</p>
+                                <h4>1. Conectando a Apresentação com a Sondagem</h4>
+                                <p>A apresentação não deve ser um monólogo genérico. Ela precisa ser uma resposta direta e personalizada ao que você descobriu na sondagem.</p>
+                                <ul><li>Relembre pontos chave da sondagem: "Lembra que você mencionou a preocupação com [dor do cliente]? É exatamente aí que nosso curso de [nome do curso] pode ajudar..."</li><li>Mostre como os benefícios do curso atendem às necessidades e sonhos específicos do cliente.</li><li>Use a linguagem e os termos que o cliente utilizou.</li></ul>
+                                <h4>2. Storytelling: Contando a História da Passaporte Edu</h4>
+                                <p>Pessoas se conectam com histórias. Use o storytelling para criar um laço emocional e transmitir os valores da Passaporte Edu.</p>
+                                <ul><li><strong>Missão e Visão:</strong> "Nossa missão na Passaporte Edu é transformar o futuro de jovens como o(a) [nome do aluno], desenvolvendo habilidades que vão muito além da sala de aula tradicional..."</li><li><strong>Valores:</strong> Destaque valores como inovação, excelência, foco no aluno, preparação para o futuro.</li><li><strong>Casos de Sucesso (Breves):</strong> "Temos alunos que, após o curso de [nome do curso], conseguiram [resultado positivo], assim como você deseja para o(a) [nome do aluno]." (Seja ético e use exemplos reais, mesmo que anonimizados).</li><li><strong>A Jornada do Aluno:</strong> Pinte um quadro de como será a experiência positiva do aluno na Passaporte Edu.</li></ul>
+                                <h4>3. Destacando os Diferenciais da Passaporte Edu</h4>
+                                <p>Com base na sondagem, enfatize os diferenciais que mais se alinham com os interesses do cliente.</p>
+                                <ul><li><strong>Metodologia Inovadora e Prática:</strong> Explique como a metodologia da Passaporte Edu é diferente e focada no aprendizado efetivo.</li><li><strong>Chancela Cambridge (para Inglês):</strong> "Nosso curso de inglês possui a chancela de Centro Preparatório Cambridge, um reconhecimento internacional que atesta a qualidade do nosso ensino e prepara para certificações vitalícias."</li><li><strong>Foco em Habilidades do Futuro:</strong> "Preparamos os alunos não apenas para provas, mas para a vida, com foco em tecnologia, educação financeira, empreendedorismo, habilidades socioemocionais..."</li><li><strong>Corpo Docente Qualificado e Engajado.</strong></li><li><strong>Ambiente Acolhedor e Estimulante.</strong></li><li><strong>Resultados Comprovados:</strong> (Se tiver dados ou depoimentos, mencione de forma breve).</li></ul>
+                                <h4>4. Utilização Estratégica de Gatilhos Mentais</h4>
+                                <p>Gatilhos mentais são estímulos que influenciam a tomada de decisão. Use-os de forma ética e natural durante a apresentação.</p>
+                                <ul><li><strong>Autoridade:</strong> "Nossa metodologia é desenvolvida por especialistas...", "Somos referência em...", "A chancela Cambridge demonstra nossa autoridade no ensino de inglês."</li><li><strong>Prova Social:</strong> "Milhares de alunos já passaram pela Passaporte Edu e transformaram seus futuros.", "Muitos pais nos procuram por indicação...", "Veja o que outros pais dizem sobre nós (se tiver depoimentos visuais ou impressos)."</li><li><strong>Escassez/Urgência (Use com Cuidado e Ética):</strong> "Nossas turmas têm vagas limitadas para garantir a qualidade do ensino individualizado.", "Essa condição especial é válida para matrículas realizadas até [data/período]." (Somente se for verdade).</li><li><strong>Reciprocidade:</strong> Oferecer uma aula experimental, um material de degustação ou uma análise de perfil pode gerar o sentimento de querer retribuir.</li><li><strong>Compromisso e Coerência:</strong> Faça pequenas perguntas durante a apresentação que levem ao "sim". "Faz sentido para você como esse curso pode ajudar o(a) [nome do aluno] a [benefício]?"</li><li><strong>Afeição/Conexão:</strong> Mostre interesse genuíno pelo aluno e pela família. Crie um ambiente amigável.</li><li><strong>Novidade:</strong> Destaque aspectos inovadores dos cursos ou da metodologia.</li></ul>
+                                <h4>5. Estruturando a Apresentação</h4>
+                                <ol><li><strong>Recapitulação da Sondagem e Conexão:</strong> Breve resumo do que foi entendido.</li><li><strong>Apresentação da Solução (Passaporte Edu e o Curso Específico):</strong> Foco nos benefícios e diferenciais relevantes para o cliente.</li><li><strong>Como Funciona:</strong> Metodologia, carga horária, o que o aluno vai aprender (de forma prática).</li><li><strong>Prova (Gatilhos):</strong> Autoridade, prova social, etc.</li><li><strong>Chamada para a Próxima Etapa (Direcionamento de Turma):</strong> "Com base no que conversamos, vejo que a turma X seria ideal para o(a) [nome do aluno]. Gostaria de verificar a disponibilidade?"</li></ol>
+                                <p><strong>Lembre-se:</strong> A apresentação deve ser um diálogo, não um discurso. Faça pausas, observe as reações do cliente e esteja pronto para responder perguntas.</p>
+                            </div>
+                        </details>
+                         <details class="bg-slate-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                             <summary class="font-semibold text-blue-600 cursor-pointer hover:text-blue-800 text-md flex justify-between items-center">Módulo 3: Superando Objeções Comuns</summary>
+                            <div class="training-module-content" id="module3-content">
+                                <h3>Módulo 3: Superando Objeções Comuns</h3>
+                                <p><strong>Objetivo:</strong> Preparar o consultor para lidar com as objeções mais frequentes de forma confiante e estratégica, transformando-as em oportunidades para reforçar o valor da Passaporte Edu e avançar no processo de fechamento.</p>
+                                <h4>1. A Mentalidade Correta ao Lidar com Objeções</h4>
+                                <ul><li><strong>Objeções são Sinais de Interesse:</strong> Muitas vezes, uma objeção indica que o cliente está considerando a proposta, mas precisa de mais informações ou segurança. Não encare como rejeição pessoal.</li><li><strong>Oportunidade para Esclarecer:</strong> Veja cada objeção como uma chance de entender melhor as preocupações do cliente e reforçar os benefícios da sua solução.</li><li><strong>Mantenha a Calma e a Empatia:</strong> Ouça atentamente, valide o sentimento do cliente ("Entendo sua preocupação com...") antes de apresentar seu contra-argumento.</li><li><strong>Não Seja Defensivo ou Confrontador:</strong> O objetivo é construir um acordo, não ganhar uma discussão.</li></ul>
+                                <h4>2. Técnica Geral para Lidar com Objeções (A.C.C.C.)</h4>
+                                <ol><li><strong>Acolher (Ouvir):</strong> Ouça a objeção completamente, sem interromper. Demonstre que está prestando atenção.</li><li><strong>Clarificar (Perguntar):</strong> Faça perguntas para entender a raiz da objeção. "Quando você diz que é caro, é em relação a quê especificamente?" ou "Para eu entender melhor, o que te faz sentir que ele não teria tempo?"</li><li><strong>Concordar Parcialmente/Validar (Empatizar):</strong> Mostre que você entende o ponto de vista do cliente. "Compreendo que o investimento é um ponto importante a ser considerado." ou "Realmente, a rotina das crianças hoje é bem corrida."</li><li><strong>Contornar/Converter (Responder/Apresentar Solução):</strong> Apresente seu argumento ou solução, conectando com os benefícios e o que foi descoberto na sondagem.</li></ol>
+                                <h4>3. Lidando com Objeções Específicas (Exemplos)</h4>
+                                <p><em>(Consulte o "Guia de Argumentos" no app para ver as quebras detalhadas. Aqui, focamos na estratégia geral.)</em></p>
+                                <h5>3.1. Objeção de Preço ("É muito caro", "Não tenho condições")</h5>
+                                <ul><li><strong>Estratégia:</strong> Reforçar o VALOR, não o preço. Focar no investimento a longo prazo, nos benefícios exclusivos, no custo-benefício. Explorar formas de pagamento.</li><li><strong>Exemplo de Clarificação:</strong> "Entendo. Para que eu possa ajudar, caro em comparação com o quê? Ou o valor total está fora do seu orçamento neste momento?"</li><li><strong>Exemplo de Contorno:</strong> "Muitos pais sentem essa preocupação inicialmente, mas quando percebem o retorno que um curso como o nosso traz para o futuro do filho, como [benefício X e Y], veem como um investimento essencial. Além disso, temos opções de parcelamento que podem facilitar..."</li></ul>
+                                <h5>3.2. Objeção de Tempo ("Meu filho já faz muitas atividades", "Não temos tempo")</h5>
+                                <ul><li><strong>Estratégia:</strong> Destacar a flexibilidade de horários, a otimização do tempo de aprendizado, e como as habilidades adquiridas podem até ajudar na gestão do tempo. Enfatizar a importância do investimento de tempo para o futuro.</li><li><strong>Exemplo de Clarificação:</strong> "Compreendo. Qual seria a disponibilidade de horários ideal para vocês encaixarem uma atividade tão importante para o desenvolvimento dele(a)?"</li><li><strong>Exemplo de Contorno:</strong> "Nossas aulas são planejadas para serem dinâmicas e aproveitarem ao máximo o tempo. Além disso, investir [X horas] por semana no desenvolvimento de [habilidade chave] pode abrir muitas portas para ele(a) no futuro. Podemos verificar juntos o melhor encaixe na rotina?"</li></ul>
+                                <h5>3.3. Objeção "Vou pensar e depois retorno"</h5>
+                                <ul><li><strong>Estratégia:</strong> Tentar entender o que está por trás da necessidade de "pensar". Qual a dúvida real? Manter o cliente engajado e tentar resolver as pendências no momento, sem ser insistente de forma negativa.</li><li><strong>Exemplo de Clarificação:</strong> "Claro, é uma decisão importante. Para que eu possa te ajudar a ter todas as informações para pensar, qual é o principal ponto que ainda está em aberto ou que te gera alguma dúvida?"</li><li><strong>Exemplo de Contorno (após clarificar):</strong> "Muitas vezes, quando adiamos uma decisão como esta, outras coisas surgem e a oportunidade pode passar. Se pudermos esclarecer esse ponto [ponto levantado pelo cliente] agora, talvez você se sinta mais seguro(a) para garantirmos a vaga do(a) [nome do aluno] hoje, aproveitando as condições especiais que conversamos." (Sempre com foco em ajudar, não pressionar).</li></ul>
+                                <h5>3.4. Objeção sobre o Material Didático (Apresentada APÓS o "sim" para o curso)</h5>
+                                <p><em>Esta objeção surge num momento diferente, após o acordo sobre o curso.</em></p>
+                                <ul><li><strong>Estratégia:</strong> Explicar a essencialidade do material para o método de ensino e o sucesso do aluno. Justificar o valor pela qualidade e abrangência. Não é um "extra", mas uma parte integral.</li><li><strong>Exemplo de Argumento:</strong> "Agora que já definimos que o curso de [nome do curso] é a melhor opção para o(a) [nome do aluno], preciso apresentar o nosso material didático. Ele é uma ferramenta fundamental para o aprendizado, desenvolvido por especialistas para que ele(a) possa acompanhar as aulas, praticar em casa e realmente consolidar todo o conhecimento. O valor dele é [valor], e ele garante que seu/sua filho(a) tenha a melhor experiência e aproveitamento."</li><li>"Este material é o guia do aluno nesta jornada. Ele contém [exemplos do conteúdo], e sem ele, o acompanhamento das aulas e o desenvolvimento pleno das habilidades que o curso propõe ficam comprometidos."</li></ul>
+                                <h4>4. Pratique, Pratique, Pratique!</h4>
+                                <p>A melhor forma de se tornar mestre em superar objeções é praticando. Faça simulações com colegas, grave-se, peça feedback. Quanto mais preparado você estiver, mais natural e confiante será sua abordagem.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </div>
 
-            <!-- ABA: Jornada do Atendimento -->
             <div id="script-helper" class="content-section" role="tabpanel" aria-labelledby="script-helper-tab">
-                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Jornada do Atendimento: Roteiro Consultivo</h2>
-                <div id="script-steps-container" class="space-y-3">
-                    <!-- Passos do script serão inseridos aqui pelo JS -->
-                </div>
+                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 mb-6">Script Helper: Passos para o Fechamento</h2>
+                <ol class="space-y-5" style="list-style: none; padding-left: 0; counter-reset: step-counter;">
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                        <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Autoapresentação + Quebra de Gelo</h3>
+                            <p class="text-slate-600 text-sm mt-1">Crie uma primeira impressão positiva e estabeleça rapport com o cliente. Mostre entusiasmo e profissionalismo.</p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Sondagem Estratégica</h3>
+                            <p class="text-slate-600 text-sm mt-1">Investigue as necessidades nas esferas: <strong class="text-slate-700">Pessoal</strong> (sonhos, preocupações), <strong class="text-slate-700">Educacional</strong> (histórico, dificuldades, objetivos para o filho) e <strong class="text-slate-700">Profissional</strong> (impacto da educação no futuro). Escuta ativa é fundamental.</p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Apresentação da Passaporte Edu</h3>
+                            <p class="text-slate-600 text-sm mt-1">Apresente a escola como a solução ideal, conectando com os pontos da sondagem. Utilize gatilhos mentais (ex: prova social, autoridade, escassez) de forma natural e ética.</p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Direcionamento de Turma</h3>
+                            <p class="text-slate-600 text-sm mt-1">Com base na sondagem, sugira a turma e o nível mais adequados. Explique os benefícios específicos daquela turma para o aluno, reforçando a ideia de que a decisão já foi tomada ("Seu filho vai se encaixar perfeitamente aqui...").</p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Apresentação de Valores (Pavão / Valor Social de Referência)</h3>
+                            <p class="text-slate-600 text-sm mt-1">Apresente o "Valor Social" de referência (valor mais alto) para ancoragem. Destaque o valor percebido e os benefícios inclusos, <strong class="text-slate-700">sem revelar o valor final com desconto ainda.</strong></p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Fechamento com Intervenção do Líder/Gerente (Obrigatório)</h3>
+                            <p class="text-slate-600 text-sm mt-1">Recapitule os pontos chave da sondagem, reforce a importância do investimento. <strong class="text-slate-700">É obrigatório chamar o Líder/Gerente Comercial neste momento.</strong> O consultor explica a situação e o report da sondagem ao líder. O líder entra na sala, reforça os benefícios e <strong class="text-slate-700">apresenta o "Valor Social" final (condição especial/desconto padrão) para o curso.</strong></p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Preenchimento da Pré-Matrícula</h3>
+                            <p class="text-slate-600 text-sm mt-1">Com o acordo verbal sobre o "Valor Social" do curso após a intervenção do líder, proceda com o preenchimento da pré-matrícula. Mantenha o entusiasmo e parabenize pela decisão. <strong class="text-slate-700">Importante: Nenhum valor de matrícula ou mensalidade é cobrado neste ato. A primeira parcela do curso será paga apenas após 30 dias.</strong></p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Passagem de Cartão (Pagamento do Material Didático Obrigatório)</h3>
+                            <p class="text-slate-600 text-sm mt-1">Após o preenchimento da pré-matrícula, apresente formalmente o material didático como parte essencial e obrigatória do curso. Explique seu valor e a necessidade do pagamento integral do material no ato. Conduza o momento do pagamento com naturalidade. <strong class="text-slate-700">EM ÚLTIMO CASO, se o responsável apresentar grande dificuldade com o pagamento integral do material neste momento, o LÍDER COMERCIAL (e somente ele) pode oferecer a opção de pagamento apenas do material inicial para garantir a matrícula, com o restante do material a ser adquirido posteriormente.</strong> Lembre ao responsável que a primeira parcela do curso vence em 30 dias.</p>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start p-4 bg-slate-50 rounded-lg shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
+                         <div class="ml-1 flex-1">
+                            <h3 class="font-semibold text-slate-700 text-md">Matrícula Efetivada e Próximos Passos</h3>
+                            <p class="text-slate-600 text-sm mt-1">Após a confirmação do pagamento, parabenize novamente. Explique os próximos passos e encaminhe para a equipa administrativa para a formalização do contrato e demais orientações.</p>
+                        </div>
+                    </li>
+                </ol>
             </div>
-            
-            <!-- ABA: Leia-me, CEO -->
-             <div id="readme-ceo" class="content-section" role="tabpanel" aria-labelledby="readme-ceo-tab">
-                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-4">Mensagem para o CEO</h2>
-                <div class="text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed space-y-3 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg shadow">
-                     <p>Olá, Sr. Douglas Peixoto.</p>
-                     <p>Esta ferramenta é uma materialização de tudo aquilo que aprendi como consultor na Passaporte Edu.</p>
-                     <p>Espero que seja uma grande ajuda para novos e antigos consultores.</p>
-                     <p>Um grande abraço,</p>
-                     <p class="signature">Philippe Azevedo</p>
+
+            <div id="readme-ceo" class="content-section" role="tabpanel" aria-labelledby="readme-ceo-tab">
+                <h2 class="text-xl md:text-2xl font-semibold text-slate-800 mb-4">Mensagem para o CEO</h2>
+                <div class="text-slate-700 text-sm md:text-base leading-relaxed space-y-3 bg-slate-50 p-6 rounded-lg shadow">
+                    <p>Olá, Sr. Douglas Peixoto.</p>
+                    <p>Meu nome é Philippe Azevedo. Comecei na Passaporte (ainda era Idiomas) como Street, depois como Consultor e, agora, como professor.</p>
+                    <p>Meu intuito é ser um dos diretores/sócios da Passaporte Edu.</p>
+                    <p>Esta ferramenta é uma materialização de tudo aquilo que aprendi como consultor, e não acho justo que isso seja mantido num cofre, apenas dentro da minha mente.</p>
+                    <p>Por isso, juntei os meus conhecimentos em informática e programação a tudo o que aprendi na área comercial da Passaporte Edu para fazer esta ferramenta tornar-se realidade.</p>
+                    <p>Estou trabalhando nesta ferramenta há 3 meses e espero que seja uma grande ajuda para novos e antigos consultores.</p>
+                    <p>Esta ferramenta é apenas a primeira de muitas inovações que desejo trazer (se for de serventia para a Passaporte, é claro).</p>
+                    <p>Desejo saúde para a nova vida que o senhor trouxe a este mundo e tenho muito a agradecer pelo império que idealizou.</p>
+                    <p>Um grande abraço,</p>
+                    <p class="signature">Philippe Azevedo</p>
                 </div>
             </div>
 
         </main>
     </div>
 
-    <footer class="text-center mt-8 mb-4 text-slate-500 dark:text-slate-400 text-xs md:text-sm">
+    <footer class="text-center mt-8 mb-4 text-slate-500 text-xs md:text-sm">
         <p>&copy; <span id="currentYear"></span> Passaporte Edu. Ferramenta de Apoio Comercial.</p>
-        <p class="mt-1">Developed By: Philippe Azevedo - v2.7</p>
+        <p class="mt-1">Developed By: Philippe Azevedo - versão 1.4</p>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    // =================================================================================
-    // DADOS DA APLICAÇÃO
-    // =================================================================================
-    const validUsers = { "hugoraphael": "Passaporteedu@2025", "douglaspeixoto": "douglaspeixoto@passaporteedu", "felipebatista": "Passaporteedu@2025", "philippeazevedo": "Passaporteedu@2025", "alexandremoura": "am@passaporte2025", "raulfarias": "rf@passaporte2025", "pauloazevedo": "pa@passaporte2025", "carlabeatriz": "cb@passaporte2025", "augustocaldas": "ac@passaporte2025", "elanearaujo": "ea@passaporte2025", "brunadarc": "bd@passaporte2025", "priscilaoliveira": "po@passaporte2025", "anarodrigues": "ar@passaporte2025", "fhylipebrandao": "fb@passaporte2025", "nathalyasibele": "ns@passaporte2025" };
-    
-    const salesData = [ { id: "preco", objection: "O curso é muito caro. / Não tenho condições agora.", rebuttals: [ "Eu entendo perfeitamente sua preocupação com o investimento. Muitas mães sentem o mesmo. Por isso, quero que veja isso não como um custo, mas como a semente de um futuro com mais oportunidades para o(a) [aluno]. O valor que apresentamos já reflete nosso esforço para viabilizar essa transformação.", "Compreendo. É exatamente por pensar em famílias como a sua que criamos opções de parcelamento. A ideia é que este investimento no futuro do(a) [aluno] se encaixe de forma suave no seu planejamento, sem pesar. Podemos ver juntos uma parcela que fique confortável?", "Faz todo o sentido sua análise. E se, além do valor, pensarmos no retorno? Uma certificação como a de Cambridge, por exemplo, pode abrir portas que valem muitas vezes mais que este investimento. Estamos falando de preparar o(a) [aluno] para um futuro onde ele(a) terá mais escolhas e segurança.", ] }, { id: "tempo", objection: "Meu filho já faz muitas atividades, não sei se terá tempo.", rebuttals: [ "Eu imagino a correria! A rotina de vocês deve ser intensa. É por isso que nossas aulas são desenhadas para serem o ponto alto da semana dele(a): dinâmicas, envolventes e que otimizam cada minuto. Não é mais uma obrigação, é um momento de desenvolvimento prazeroso. Qual seria o dia que vocês têm um 'respiro' na agenda?", "Essa é uma preocupação muito comum. O que muitos pais percebem é que, ao desenvolver habilidades como as que ensinamos, o(a) [aluno] na verdade ganha tempo, pois se torna mais organizado(a) e focado(a) nas outras atividades. É um investimento de tempo que se paga com mais produtividade.", ] }, { id: "desconhecimento", objection: "Não conheço a Passaporte Edu muito bem. / Essa escola é nova?", rebuttals: [ "Que bom que perguntou! É muito importante sentir segurança onde investimos no futuro dos nossos filhos. A Passaporte Edu já transformou a vida de milhares de jovens em nossas unidades. Mais do que uma escola, somos um ecossistema de desenvolvimento, e a prova da nossa qualidade é o selo de Centro Preparatório Oficial Cambridge, um reconhecimento internacional que poucas escolas têm.", "Entendo sua cautela. Por isso, não quero que acredite apenas nas minhas palavras. Gostaria de te mostrar alguns projetos de alunos e, se quiser, podemos até agendar para você conversar com uma mãe que, assim como você, também tinha essa dúvida no início." ] }, { id: "gostar", objection: "Será que meu filho vai gostar? / Ele é muito tímido(a).", rebuttals: [ "Essa é a minha preocupação número um também. De nada adianta a melhor metodologia se a criança não se sente feliz e acolhida. Nossas turmas são pequenas justamente para que o professor possa entender a personalidade de cada um e criar um ambiente onde até os mais tímidos se sentem seguros para participar e brilhar.", "Entendo perfeitamente. Muitos dos nossos alunos mais participativos hoje eram tímidos no início. Nossos cursos de Oratória e habilidades socioemocionais, integrados ao aprendizado, são desenhados para construir essa autoconfiança de forma natural e divertida. Ele(a) vai aprender a se expressar, e não apenas a matéria." ] }, { id: "experiencia_negativa", objection: "Já tentei outros cursos e não deu certo.", rebuttals: [ "Sinto muito que tenha tido essa experiência. Agradeço por compartilhar e me dar a chance de mostrar porque somos diferentes. O que, na sua opinião, faltou nos outros lugares para que o(a) [aluno] tivesse sucesso? É muito importante para mim entender isso.", "É exatamente por causa de experiências como a sua que focamos em resultados que você pode ver e tocar. Por exemplo, nosso curso de inglês não termina com um 'certificado da escola', mas prepara o(a) [aluno] para uma certificação de Cambridge, um documento reconhecido no mundo todo que comprova a proficiência dele(a)." ] }, { id: "pensar", objection: "Vou pensar e depois retorno.", rebuttals: [ "Claro, é uma decisão muito importante e respeito seu tempo. Para que sua reflexão seja a mais produtiva possível, ficou alguma dúvida ou algum ponto que não te deixou 100% segura? Quero garantir que você tenha todas as informações para tomar a melhor decisão para o(a) [aluno].", "Com certeza. E enquanto a senhora pensa, gostaria de deixar algo em sua mente: o 'time' perfeito para investir no futuro é sempre o agora. Cada dia de aprendizado é um passo a mais que o(a) [aluno] dá em direção a um futuro brilhante. Se houver algo que eu possa fazer para te dar essa segurança hoje, por favor, me diga." ] }, { id: "material_didatico", objection: "Este material didático é obrigatório mesmo?", rebuttals: [ "Sim, e explico o porquê: o material não é um 'extra', ele é o mapa da nossa jornada de aprendizado. É a ferramenta que conecta o que o professor ensina em sala com a prática em casa, garantindo que o conhecimento seja realmente absorvido. Sem ele, seria como ir a uma viagem sem o GPS.", "Entendo a pergunta. O valor do material reflete a qualidade de uma ferramenta desenvolvida por especialistas internacionais, como a Cambridge University Press. É um investimento único que garante que o(a) [aluno] terá o melhor recurso do início ao fim do seu desenvolvimento conosco." ] }, { id: "marido", objection: "Tenho que falar com meu marido.", rebuttals: [ "Com certeza, uma decisão familiar é sempre mais forte. Tenho certeza que seu marido vai apoiar uma escolha que trará tantos benefícios para o(a) [aluno]. O que muitas mães fazem, para não perder a condição especial que o(a) [líder] liberou para hoje, é garantir a vaga através da nossa pré-matrícula, que já trava esse benefício. Assim, a senhora pode conversar com ele com a tranquilidade de que a oportunidade para o(a) [aluno] já está reservada. O que acha?", ] }, { id: "distancia", objection: "A distância é um problema.", rebuttals: [ "Compreendo a questão da logística. Muitos pais que moram em outros bairros nos dizem que o tempo que investem no trajeto é compensado pela certeza de que seus filhos estão recebendo uma educação de padrão internacional, algo que não encontraram mais perto. É um investimento de tempo para economizar preocupações no futuro.", "Apenas algumas vezes por semana, o(a) [aluno] terá acesso a um ambiente que pode mudar a trajetória da vida dele(a). Se colocarmos na balança o benefício de uma formação de excelência contra o esforço do deslocamento, o futuro dele(a) não merece essa prioridade?" ] }, { id: "desempregada", objection: "Estou desempregada.", rebuttals: [ "Eu sinto muito por este momento e admiro ainda mais sua força em estar aqui, buscando o melhor para o(a) [aluno]. É justamente em momentos desafiadores que investir na educação dos filhos se torna o ato de maior esperança. Este curso pode ser a ferramenta que abrirá as portas para que ele(a) tenha um futuro mais seguro e estável.", "Entendo completamente. Por isso, quero que saiba que a primeira parcela do curso em si é só daqui a 30 dias. O investimento para garantir a vaga hoje é apenas no material didático. Isso te daria um fôlego para se organizar, com a certeza de que já garantiu o futuro do seu filho." ] }, { id: "desconfianca_escolas", objection: "Já ouvi falar de escolas que prometem muito e não cumprem.", rebuttals: [ "A senhora tem toda a razão em ser cautelosa. O mercado está cheio de promessas. É por isso que na Passaporte Edu preferimos falar de provas. A chancela de Centro Preparatório Cambridge não é uma promessa nossa, é um atestado de qualidade de uma das maiores universidades do mundo. Isso significa que somos auditados e seguimos um padrão de excelência internacional.", "Entendo seu receio. Por isso, mais do que te falar, eu gostaria de te mostrar. Nossas redes sociais estão cheias de projetos de alunos, depoimentos de pais e resultados reais. A nossa reputação é construída pela satisfação das famílias que confiam em nós." ] }, { id: "situacao_economica", objection: "Com a situação atual, é difícil investir em algo a mais.", rebuttals: [ "Eu concordo, a situação econômica exige que a gente priorize cada centavo. E é por isso que estou aqui para te mostrar que a educação de qualidade não é 'algo a mais', é o investimento mais seguro e rentável que podemos fazer. É o que vai blindar o futuro do(a) [aluno] contra qualquer crise.", "Compreendo. Muitos pais sentem o mesmo. No entanto, as habilidades que o(a) [aluno] desenvolverá aqui, como fluência em inglês, pensamento computacional e inteligência financeira, são à prova de crise. São ferramentas que o tornarão mais valioso e preparado para qualquer cenário econômico." ] }
-    ];
-
-    const manualModules = [
-        { title: "Apostila 1: A Psicologia da Venda Consultiva", content: `<h3>Apostila 1: A Psicologia da Venda Consultiva</h3><p><strong>Nossa missão não é vender cursos. É construir confiança e guiar os pais numa decisão crucial para o futuro de seus filhos.</strong> A venda consultiva é sobre entender o ser humano à sua frente, suas esperanças e seus medos.</p><h4>A Mentalidade do Consultor de Elite</h4><ul><li><strong>Você é um Guia, não um Vendedor:</strong> Sua postura deve ser de um especialista que está ali para ajudar, ouvir e orientar. A venda é a consequência natural de uma consultoria bem feita. Você não está empurrando um produto, está apresentando uma solução para uma dor ou um sonho que acabou de ouvir.</li><li><strong>Escuta Empática Ativa:</strong> Não ouça apenas as palavras, ouça os sentimentos por trás delas. Uma mãe que diz "ele é tímido" está, na verdade, dizendo "eu tenho medo que meu filho não se encaixe e sofra". Sua resposta deve acolher o sentimento ("Eu entendo completamente essa preocupação...") antes de apresentar a solução.</li><li><strong>Curiosidade Genuína:</strong> Interesse-se de verdade pela história da família. Pergunte sobre os hobbies do aluno, sobre a dinâmica da família. A paixão pelo que você faz transparece quando você demonstra que se importa com as pessoas, não apenas com os números.</li></ul><h4>Na Prática: Traduzindo para a Conversa</h4><div class="scenario"><p>Ao invés de perguntar "Qual curso você procura?", experimente: "Para que eu possa ajudar da melhor forma, me conte um pouco sobre o momento de vida do(a) [aluno]. O que vocês, como pais, mais sonham para o futuro dele(a)?"</p></div>` },
-        { title: "Apostila 2: Sondagem Profunda - O Coração da Venda", content: `<h3>Apostila 2: Sondagem Profunda - O Coração da Venda</h3><p>A sondagem é onde a venda é ganha ou perdida. É o momento de coletar as 'matérias-primas' emocionais que você usará para construir sua argumentação. Sem uma boa sondagem, seus argumentos serão genéricos e sem impacto.</p><h4>Técnica do Funil de Perguntas</h4><p>Comece com perguntas abertas e vá aprofundando para as mais específicas e emocionais. O objetivo é sair do superficial e chegar no 'porquê' da visita.</p><ul><li><strong>Nível 1 (Abertas - O Quê?):</strong> "Me conte um pouco sobre o(a) [aluno]. O que ele(a) mais gosta de fazer na escola e fora dela?"</li><li><strong>Nível 2 (Aprofundamento - Como?):</strong> "Interessante! E como vocês percebem a importância de habilidades como o inglês para o futuro dele(a) nessa área de [interesse do aluno] que você mencionou?"</li><li><strong>Nível 3 (Emocionais - Por Quê?):</strong> "Entendi. E qual é o maior sonho que a senhora, como mãe, tem para o futuro do(a) [aluno]? O que te deixaria imensamente orgulhosa de ver ele(a) conquistando?"</li></ul><h4>O Poder do Silêncio</h4><p>Após uma pergunta emocional, fique em silêncio. Deixe a mãe pensar e sentir. A resposta que virá será carregada de valor e verdade. É nessa resposta que você encontrará a chave para o fechamento. Não tenha medo da pausa; ela demonstra respeito e confiança.</p>` },
-        { title: "Apostila 3: Apresentação de Impacto - Pintando o Futuro", content: `<h3>Apostila 3: Apresentação de Impacto - Pintando o Futuro</h3><p>Sua apresentação não deve ser sobre as características dos cursos, mas sobre a <strong>transformação</strong> que eles proporcionam na vida do aluno. Você não vende aulas de inglês; você vende a confiança de uma apresentação em público, a alegria de um intercâmbio, a segurança de um bom emprego.</p><h4>Storytelling: A Jornada do Herói</h4><p>O herói da história é o aluno. A Passaporte Edu é o 'mentor' que lhe dará as 'ferramentas mágicas' para vencer os desafios. Use as informações da sondagem para personalizar a história.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Sra. [Nome], lembra que a senhora me disse que seu maior sonho é ver o(a) [aluno] se sentindo mais seguro e confiante? Imagine ele(a), que hoje é um pouco mais reservado, daqui a um ano, aqui na Passaporte Edu, liderando a apresentação de um projeto de robótica que ele mesmo criou, falando em inglês para os colegas e para vocês. Imagine o brilho nos olhos e o orgulho que vocês sentirão ao ver essa evolução. É essa a jornada que construímos aqui."</blockquote></div><h4>Conectando Características a Benefícios Emocionais</h4><ul><li><strong>Característica Técnica:</strong> "Somos Centro Preparatório Cambridge."<br><strong>Benefício Emocional:</strong> "Isso se traduz em <strong>segurança</strong> e <strong>tranquilidade</strong> para a senhora, a certeza de que seu filho está recebendo uma educação de padrão internacional, um verdadeiro passaporte que abrirá qualquer porta que ele(a) queira no futuro, sem limites."</li><li><strong>Característica Técnica:</strong> "Temos cursos de empreendedorismo."<br><strong>Benefício Emocional:</strong> "Isso significa que estamos preparando o(a) [aluno] não para ser apenas um bom empregado, mas para ser o <strong>protagonista</strong> da sua própria história, alguém capaz de criar suas próprias oportunidades. É o <strong>alívio</strong> de saber que ele(a) terá as ferramentas para se virar, não importa o cenário econômico."</li></ul>`},
-        { title: "Apostila 4: Lidando com Preocupações (Objeções)", content: `<h3>Apostila 4: Lidando com Preocupações (Objeções)</h3><p>Uma objeção não é um "não". É um pedido de mais informações ou de mais segurança. É um sinal de interesse. Se o cliente não tivesse interesse, ele simplesmente iria embora.</p><h4>Valide Antes de Contornar</h4><p>A regra de ouro. Nunca confronte. Sempre valide o sentimento da mãe. Isso a desarma e a coloca ao seu lado, mostrando que você está ali para ajudar, não para vencer uma discussão.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><ul><li><strong>Objeção:</strong> "Achei o valor um pouco alto."</li><li><strong>Resposta Errada:</strong> "Mas não é caro pela qualidade que oferecemos." (Confronto)</li><li><strong>Resposta Certa:</strong> "Eu entendo perfeitamente que o investimento na educação dos filhos é um ponto importante no planejamento da família. É uma decisão que precisa ser bem pensada. E é exatamente por isso que quero te mostrar o retorno que este investimento trará em forma de oportunidades para o(a) [aluno]..." (Validação + Transição)</li></ul></div><h4>A Técnica do "Isolamento"</h4><p>Antes de responder a uma objeção, isole-a para saber se é a única preocupação real. Isso evita que você resolva um problema e o cliente apresente outro em seguida.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Sra. [Nome], entendi a questão do valor. E faz todo sentido. Mas, só para eu entender, se a questão do investimento estivesse resolvida, se ele se encaixasse perfeitamente no seu orçamento, haveria mais alguma coisa que te impediria de tomar essa decisão pelo futuro do(a) [aluno] hoje?"</blockquote><p>Se ela disser "não, seria só isso", você sabe que só precisa focar em justificar o valor. Se ela trouxer outra questão ("Ah, também tenho que ver a questão do tempo..."), você descobriu a objeção real que talvez estivesse por trás da primeira.</p></div>`},
-        { title: "Apostila 5: O Ecossistema Passaporte Edu", content: `<h3>Apostila 5: Vendendo a Formação Completa</h3><p>Nosso maior diferencial é não sermos uma escola de um curso só. Somos um centro de desenvolvimento de habilidades para o século 21. A venda mais eficaz é a que mostra como nossas diferentes áreas se conectam para formar um jovem completo.</p><h4>A Trilha do Conhecimento</h4><p>Apresente os eixos (Be Bilingual, Be a Coder, Be a Boss) como uma trilha que se complementa. Não venda produtos, venda um projeto de vida.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"O que fazemos aqui, Sra. [Nome], é único. No 'Be Bilingual', damos ao(à) [aluno] a voz para se comunicar com o mundo. No 'Be a Coder', damos a ele(a) a capacidade de entender e criar a tecnologia que move esse mundo. E no 'Be a Boss', ensinamos ele(a) a ter a atitude e as ferramentas para liderar e transformar ideias em realidade. Uma habilidade potencializa a outra, criando um jovem preparado para qualquer desafio que a vida apresentar."</blockquote></div><h4>Identificando Oportunidades de Cross-selling</h4><p>Durante a sondagem, se a mãe menciona que o filho é criativo mas desorganizado, você tem a deixa perfeita para conectar dois de nossos pilares.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"É maravilhoso que ele seja tão criativo! E o nosso curso de Robótica pode ser um canal incrível para essa criatividade. E sabe o que é interessante? Muitos pais combinam a Robótica com o nosso curso de Educação Financeira, porque ele ensina justamente a organização e o planejamento que transformam a criatividade em projetos concretos. É a união perfeita da inventividade com a disciplina para que as ideias dele saiam do papel."</blockquote></div>`},
-        { title: "Apostila 6: A Arte do Fechamento", content: `<h3>Apostila 6: A Arte do Fechamento</h3><p>O fechamento é o momento de transformar a conexão e o valor construídos em um compromisso. O objetivo é fazer a mãe sentir que está tomando a melhor decisão da vida dela pelo filho. Você deve conduzir essa etapa com segurança e tranquilidade.</p><h4>O Programa Educacional</h4><p>A condição especial não é um mero desconto. É a inclusão da família em um programa seleto. Isso eleva o status da oferta e cria um senso de pertencimento e oportunidade única.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Sra. [Nome], pelo padrão de excelência que oferecemos, com a chancela Cambridge e nosso ecossistema completo, nosso Valor Social para esta jornada de desenvolvimento é de [Valor Social]. Porém, para famílias como a sua, que chegam até aqui e demonstram um compromisso real com o futuro do filho, nós temos algo especial. O [Líder] me autorizou a incluir o(a) [aluno] em nosso <strong>Programa de Incentivo Educacional</strong>. Ao aderir a este programa hoje, o investimento se torna [Valor com Desconto]."</blockquote></div><h4>O Fechamento Presumido</h4><p>Aja como se a decisão já tivesse sido tomada. A dúvida gera dúvida. Após apresentar o valor, não pergunte "E então, vamos fechar?". Direcione a conversa para a próxima ação concreta.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Parabéns, tenho certeza de que o(a) [aluno] vai amar. Para qual e-mail eu posso enviar a confirmação da pré-matrícula dele(a)?"</blockquote><p>Outros exemplos: "O nome completo para a matrícula é [Nome Completo do Aluno], correto?" ou "Qual a melhor forma de pagamento para o material didático, cartão de crédito ou PIX?".</p></div>`},
-        { title: "Apostila 7: Pós-Venda - O Início do Relacionamento", content: `<h3>Apostila 7: Pós-Venda - O Início do Relacionamento</h3><p>A matrícula não é o fim da sua relação com a família, é o começo. Um cliente satisfeito é sua maior fonte de novos negócios (indicações) e um testemunho vivo da qualidade do seu trabalho.</p><h4>O Contato de Boas-Vindas</h4><p>Uma semana após o início das aulas, um contato proativo é ouro. Mostra que você não estava interessado apenas na venda, mas no sucesso do aluno.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Olá, Sra. [Nome], aqui é o [Seu Nome] da Passaporte Edu. Não quero tomar seu tempo, só liguei para saber como foi a primeira semana do(a) [aluno]. Ele(a) se adaptou bem? Está gostando dos colegas e do professor?"</blockquote><p>Este simples ato demonstra cuidado e profissionalismo, e solidifica a certeza da mãe de que fez a escolha certa.</p></div><h4>Transformando Satisfação em Indicação</h4><p>Quando o feedback for positivo, essa é a hora de agir. O cliente está feliz e propenso a compartilhar essa felicidade.</p><div class="scenario"><h4>Na Prática: Traduzindo para a Conversa</h4><blockquote>"Fico genuinamente feliz em ouvir isso! Ver o desenvolvimento deles é o que nos move. Sra. [Nome], a sua experiência positiva é o nosso melhor cartão de visita. Inclusive, se a senhora tiver amigas que, assim como você, também sonham com um futuro brilhante para os filhos, eu ficaria muito honrado em recebê-las para uma conversa. A indicação de uma mãe satisfeita tem um peso enorme para nós e temos um programa especial de agradecimento por isso."</blockquote></div>`},
-    ];
-
-    const scriptSteps = [
-        { title: 'Auto apresentação + quebra de gelo', content: `<h4>Mentalidade</h4><p>Meu objetivo não é vender, é fazer com que essa mãe se sinta acolhida e compreendida. Quero que ela pense: "Finalmente, alguém que me entende".</p><h4>Abordagem Emocional</h4><p>Seja caloroso, sorria com os olhos. Seu tom de voz deve ser calmo e seguro.</p><h4>Exemplo de Fala</h4><blockquote>"Olá, Sra. [Nome], seja muito bem-vinda à Passaporte Edu! Meu nome é [Seu Nome]. Fico muito feliz que tenha tirado um tempinho na sua agenda corrida para vir conversar sobre o futuro do(a) [aluno]. Por favor, fique à vontade, aceita uma água, um café? A casa é sua."</blockquote>`},
-        { title: 'Sondagem', content: `<h4>Mentalidade</h4><p>Preciso descobrir o 'porquê' por trás do 'o quê'. Qual o sonho ou o medo que a trouxe até aqui? Preciso que ela me conte uma história, não que me dê respostas.</p><h4>Abordagem Emocional</h4><p>Faça perguntas abertas e demonstre escuta ativa, acenando com a cabeça e usando interjeições como "Entendo...", "Interessante...".</p><h5>Exemplos de Sondagem Pessoal</h5><blockquote>"Para começarmos, me fale um pouco sobre o(a) [aluno]. O que faz os olhos dele(a) brilharem?"</blockquote><blockquote>"E a senhora, como mãe, qual é o seu maior sonho para ele(a)? O que te faria sentir que cumpriu sua missão?"</blockquote><h5>Exemplos de Sondagem Educacional</h5><blockquote>"Como tem sido a jornada escolar dele(a) até aqui? Existe alguma área em que ele(a) se sente mais à vontade ou algum desafio que ele(a) enfrenta?"</blockquote><blockquote>"Além das notas, que tipo de habilidade a senhora acredita que faria uma grande diferença para o desenvolvimento dele(a) neste momento?"</blockquote><h5>Exemplos de Sondagem Profissional</h5><blockquote>"Pensando lá na frente, que tipo de pessoa e profissional a senhora sonha que o(a) [aluno] se torne?"</blockquote><blockquote>"Como a senhora enxerga a importância de habilidades como fluência em inglês ou entender de tecnologia para que ele(a) alcance esse sonho?"</blockquote>`},
-        { title: 'Apresentação da Passaporte Edu', content: `<h4>Mentalidade</h4><p>Vou conectar cada palavra que ela me disse a uma solução que nós oferecemos. Vou mostrar a ela o futuro que ela sonha para o filho, e como nós somos a ponte para chegar lá.</p><h4>Abordagem Emocional</h4><p>Use um tom de voz inspirador. Use o nome do aluno frequentemente.</p><h4>Exemplo de Fala</h4><blockquote>"Sra. [Nome], o que a senhora me descreveu, esse sonho de ver o(a) [aluno] mais confiante e preparado para o mundo, é exatamente a razão pela qual a Passaporte Edu existe. Imagine ele(a), daqui a um tempo, não apenas falando inglês, mas usando o inglês para apresentar um projeto que ele(a) mesmo(a) criou no nosso curso de tecnologia. Imagine o orgulho. É essa transformação que nós construímos aqui."</blockquote>`},
-        { title: 'Direcionamento de turma', content: `<h4>Mentalidade</h4><p>A decisão já foi tomada emocionalmente. Agora, vou apenas formalizar o caminho lógico. A matrícula não é uma opção, é o próximo passo natural.</p><h4>Abordagem Emocional</h4><p>Seja assertivo, mas gentil. Use uma linguagem que presume a continuidade.</p><h4>Exemplo de Fala</h4><blockquote>"Com base na idade e na personalidade incrível do(a) [aluno] que a senhora descreveu, o caminho perfeito para ele(a) começar essa jornada é na nossa turma [Nome da Turma]. As aulas são às [Dias] e [Horário]. Já estou até imaginando a interação dele(a) com os colegas. O que a senhora acha desse horário?"</blockquote>`},
-        { title: 'Passagem de Valores', content: `<h4>Mentalidade</h4><p>Preciso ancorar o valor da nossa transformação antes de falar de números. O preço deve parecer pequeno perto do tamanho do sonho que vamos realizar.</p><h4>Abordagem Emocional</h4><p>Mantenha uma postura séria e profissional, que transmita o peso e a importância do que está sendo oferecido.</p><h4>Exemplo de Fala</h4><blockquote>"Sra. [Nome], para proporcionar essa transformação completa, com uma educação de padrão internacional validada por Cambridge e todo o nosso ecossistema de desenvolvimento, o Valor Social desta jornada educacional é de [Valor Social]."</blockquote>`},
-        { title: 'Fechamento', content: `<h4>Mentalidade</h4><p>Este é o momento de empoderar a mãe. Ela não está comprando um curso, está fazendo um ato de amor e compromisso com o futuro do filho.</p><h4>Abordagem Emocional</h4><p>Peça permissão para trazer seu gestor. Isso cria um evento, um momento de importância.</p><h4>Exemplo de Fala</h4><blockquote><strong>(Consultor):</strong> "Sra. [Nome], vendo o seu comprometimento com o(a) [aluno], eu gostaria de verificar uma possibilidade especial para vocês. Com sua licença, vou chamar meu gerente, o [Líder], um instante."<br><br><strong>(Líder):</strong> "Sra. [Nome], o [Consultor] me contou a história de vocês e ficamos encantados. Para famílias comprometidas como a sua, temos o nosso <strong>Programa de Incentivo Educacional</strong>. Ao aderir a este programa hoje, o investimento para essa jornada se torna [Valor com Desconto]."</blockquote>`},
-        { title: 'Pré Matrícula', content: `<h4>Mentalidade</h4><p>A venda acabou. Agora começa o relacionamento. Meu foco é em parabenizar, reforçar a decisão e fazer a mãe se sentir incrível.</p><h4>Abordagem Emocional</h4><p>Sorria, relaxe a postura. O tom é de celebração.</p><h4>Exemplo de Fala</h4><blockquote>"Seja muito bem-vinda à família Passaporte Edu! Sem dúvida, uma das melhores decisões que a senhora poderia tomar pelo futuro do(a) [aluno]. Vamos só preencher os dados para garantir a vaga dele(a) no programa. Me confirme seu nome completo, por favor..."</blockquote>`},
-        { title: 'Passagem de cartão', content: `<h4>Mentalidade</h4><p>O material não é um custo, é o kit de ferramentas que o herói (aluno) precisa para sua jornada. É parte essencial.</p><h4>Abordagem Emocional</h4><p>Apresente o material com entusiasmo, como se estivesse entregando um presente.</p><h4>Exemplo de Fala</h4><blockquote>"Agora, a parte mais legal! Para que o(a) [aluno] tenha a melhor experiência possível, ele(a) receberá nosso kit de ferramentas para o sucesso: o material didático exclusivo. O investimento para este kit completo é de [Valor do Material]. Podemos acertar no cartão?"</blockquote>`},
-        { title: 'Passagem de bastão para o administrativo', content: `<h4>Mentalidade</h4><p>Minha última impressão deve ser tão boa quanto a primeira. Preciso garantir que ela saia daqui segura, feliz e sem nenhuma dúvida.</p><h4>Abordagem Emocional</h4><p>Caminhe com a mãe até a porta. Entregue um cartão seu.</p><h4>Exemplo de Fala</h4><blockquote>"Prontinho, Sra. [Nome]! Tudo certo. O primeiro dia de aula do(a) [aluno] será na próxima [Dia da semana]. Nossa equipe vai te adicionar ao grupo de pais no WhatsApp para todas as comunicações. Mais uma vez, parabéns. Se tiver qualquer dúvida, este é o meu contato direto."</blockquote>`},
-    ];
-    
-    // =================================================================================
-    // SELEÇÃO DE ELEMENTOS DO DOM
-    // =================================================================================
-    const loginScreen = document.getElementById('login-screen');
-    const mainAppContent = document.getElementById('main-app-content');
-    const loginForm = document.getElementById('login-form');
-    const loginError = document.getElementById('login-error');
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const contentSections = document.querySelectorAll('.content-section');
-    const readmeCeoNavItem = document.getElementById('readme-ceo-nav-item');
-    const objectionSearch = document.getElementById('objection-search');
-    const objectionSelect = document.getElementById('objection-select');
-    const rebuttalsContainer = document.getElementById('rebuttals-container');
-    const selectedObjectionContainer = document.getElementById('selected-objection-container');
-    const selectedObjectionText = document.getElementById('selected-objection-text');
-    const rebuttalsTitle = document.getElementById('rebuttals-title');
-    const studentNameInput = document.getElementById('student-name');
-    const leaderNameInput = document.getElementById('leader-name');
-    const welcomeUsername = document.getElementById('welcome-username');
-    const manualContainer = document.getElementById('manual-container');
-    const scriptStepsContainer = document.getElementById('script-steps-container');
-    const currentYearSpan = document.getElementById('currentYear');
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const htmlTag = document.documentElement;
-    // Dashboard elements
-    const editNumbersBtn = document.getElementById('edit-numbers-btn');
-    const performanceInputsContainer = document.getElementById('performance-inputs-container');
-    const performanceInputs = document.getElementById('performance-inputs');
-    const goalDetailsText = document.getElementById('goal-details-text');
-    const conversionDetailsText = document.getElementById('conversion-details-text');
-    const closingDetailsText = document.getElementById('closing-details-text');
-
-    // Chart instances
-    let goalChart, conversionChart, closingChart;
-
-    // =================================================================================
-    // FUNÇÕES DA APLICAÇÃO
-    // =================================================================================
-    
-    function handleLogin(event) {
-        event.preventDefault();
-        const username = loginForm.username.value.trim().toLowerCase();
-        const password = loginForm.password.value;
-        readmeCeoNavItem.classList.add('hidden');
-        if (validUsers[username] && validUsers[username] === password) {
-            loginScreen.style.display = 'none';
-            mainAppContent.classList.remove('hidden');
-            document.body.classList.remove('justify-center');
-            document.body.classList.add('justify-start', 'pt-6', 'md:pt-10');
-            loginError.classList.add('hidden');
-            welcomeUsername.textContent = username.charAt(0).toUpperCase() + username.slice(1);
-            if (username === 'douglaspeixoto') {
-                readmeCeoNavItem.classList.remove('hidden');
-            }
-            switchTab('dashboard');
-            renderDashboard();
-        } else {
-            loginError.textContent = 'Utilizador ou senha inválidos.';
-            loginError.classList.remove('hidden');
-        }
-    }
-
-    function applyDarkMode(isDark) {
-        htmlTag.classList.toggle('dark', isDark);
-        darkModeToggle.checked = isDark;
-    }
-
-    function toggleDarkMode() {
-        const isDark = darkModeToggle.checked;
-        localStorage.setItem('darkMode', isDark);
-        applyDarkMode(isDark);
-        renderDashboard(); // Re-render charts with new theme colors
-    }
-
-    function getPersonalizedText(text) {
-        const studentName = studentNameInput.value.trim() || '[aluno]';
-        const leaderName = leaderNameInput.value.trim() || '[líder]';
-        return text.replace(/\[aluno\]/gi, `<strong>${studentName}</strong>`)
-                   .replace(/\[líder\]/gi, `<strong>${leaderName}</strong>`)
-                   .replace(/\[Nome do Responsável\]/gi, '<strong>[Nome do Responsável]</strong>')
-                   .replace(/\[Seu Nome\]/gi, '<strong>[Seu Nome]</strong>')
-                   .replace(/\[dor do cliente\]/gi, '<strong>[dor do cliente]</strong>')
-                   .replace(/\[nome da turma\]/gi, '<strong>[Nome da Turma]</strong>')
-                   .replace(/\[dias\]/gi, '<strong>[Dias]</strong>')
-                   .replace(/\[horário\]/gi, '<strong>[Horário]</strong>')
-                   .replace(/\[nome do professor\]/gi, '<strong>[Nome do Professor]</strong>')
-                   .replace(/Valor Social/g, '<strong>Valor Social</strong>')
-                   .replace(/\[valor com desconto\]/gi, '<strong>[Valor com Desconto]</strong>')
-                   .replace(/\[valor do material\]/gi, '<strong>[Valor do Material]</strong>')
-                   .replace(/\[dia da semana\]/gi, '<strong>[Dia da semana]</strong>')
-                   .replace(/\[ponto chave da sondagem\]/gi, '<strong>[ponto chave da sondagem]</strong>');
-    }
-
-    function populateObjections(searchTerm = '') {
-        const currentSelection = objectionSelect.value;
-        objectionSelect.innerHTML = '<option value="">-- Escolha uma objeção --</option>';
-        const filteredData = salesData.filter(item =>
-            item.objection.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        filteredData.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = item.objection;
-            objectionSelect.appendChild(option);
-        });
-        if (filteredData.some(item => item.id === currentSelection)) {
-            objectionSelect.value = currentSelection;
-        }
-    }
-
-    function displayRebuttals(objectionId) {
-        rebuttalsContainer.innerHTML = '';
-        if (!objectionId) {
-            rebuttalsTitle.classList.add('hidden');
-            selectedObjectionContainer.classList.add('hidden');
-            return;
-        }
-        const selectedData = salesData.find(item => item.id === objectionId);
-        if (selectedData) {
-            selectedObjectionText.innerHTML = getPersonalizedText(selectedData.objection);
-            selectedObjectionContainer.classList.remove('hidden');
-            rebuttalsTitle.classList.remove('hidden');
-            selectedData.rebuttals.forEach((rebuttal) => {
-                const card = document.createElement('div');
-                card.className = 'rebuttal-card bg-slate-50 dark:bg-slate-700/60 p-4 md:p-5 rounded-lg shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow duration-200';
-                const content = document.createElement('p');
-                content.className = 'text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed';
-                content.innerHTML = getPersonalizedText(rebuttal);
-                const copyButton = document.createElement('button');
-                copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg> Copiar`;
-                copyButton.className = 'flex items-center mt-4 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors';
-                copyButton.onclick = () => {
-                    const originalText = copyButton.innerHTML;
-                    navigator.clipboard.writeText(content.textContent).then(() => {
-                        copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Copiado!`;
-                        setTimeout(() => { copyButton.innerHTML = originalText; }, 2000);
-                    }).catch(err => console.error('Erro ao copiar texto: ', err));
-                };
-                card.appendChild(content);
-                card.appendChild(copyButton);
-                rebuttalsContainer.appendChild(card);
-            });
-            rebuttalsTitle.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-            rebuttalsTitle.classList.add('hidden');
-            selectedObjectionContainer.classList.add('hidden');
-        }
-    }
-
-    function createManual() {
-        if (!manualContainer) return;
-        manualContainer.innerHTML = '';
-        manualModules.forEach(module => {
-            const details = document.createElement('details');
-            details.className = 'bg-slate-50 dark:bg-slate-700/60 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200';
-            const summary = document.createElement('summary');
-            summary.className = 'font-semibold text-blue-600 dark:text-blue-400 cursor-pointer hover:text-blue-800 dark:hover:text-blue-300 text-md';
-            summary.textContent = module.title;
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'manual-module-content';
-            contentDiv.innerHTML = getPersonalizedText(module.content);
-            details.appendChild(summary);
-            details.appendChild(contentDiv);
-            manualContainer.appendChild(details);
-        });
-    }
-
-    function createScriptHelper() {
-        if (!scriptStepsContainer) return;
-        scriptStepsContainer.innerHTML = '';
-        scriptSteps.forEach(step => {
-            const details = document.createElement('details');
-            details.className = 'script-example bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200';
-            const summary = document.createElement('summary');
-            summary.className = 'font-semibold text-lg text-blue-800 dark:text-blue-300 cursor-pointer';
-            summary.textContent = step.title;
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'script-step-content';
-            contentDiv.innerHTML = getPersonalizedText(step.content);
-            details.appendChild(summary);
-            details.appendChild(contentDiv);
-            scriptStepsContainer.appendChild(details);
-        });
-    }
-
-    function renderDashboard() {
-        const target = parseInt(document.getElementById('target-input').value) || 0;
-        const achieved = parseInt(document.getElementById('achieved-input').value) || 0;
-        const visits = parseInt(document.getElementById('visits-input').value) || 0;
-        const closings = parseInt(document.getElementById('closings-input').value) || 0;
-        
-        const isDark = htmlTag.classList.contains('dark');
-        const fontColor = isDark ? '#cbd5e1' : '#475569';
-        Chart.defaults.color = fontColor;
-
-        // Goal Chart
-        const goalProgress = target > 0 ? Math.min((achieved / target) * 100, 100) : 0;
-        goalDetailsText.textContent = `(${achieved} de ${target} matrículas)`;
-        const goalData = {
-            labels: ['Alcançado', 'Faltando'],
-            datasets: [{
-                data: [achieved, Math.max(0, target - achieved)],
-                backgroundColor: ['#2563eb', '#334155'],
-                borderColor: isDark ? '#0f172a' : '#f1f5f9',
-                borderWidth: 5,
-                hoverOffset: 4
-            }]
+    <script>
+        // --- Credenciais de Login ---
+        const validUsers = {
+            "hugoraphael": "Passaporteedu@2025",
+            "douglaspeixoto": "douglaspeixoto@passaporteedu",
+            "felipebatista": "Passaporteedu@2025",
+            "philippeazevedo": "Passaporteedu@2025",
+            "alexandremoura": "am@passaporte2025",
+            "raulfarias": "rf@passaporte2025",
+            "pauloazevedo": "pa@passaporte2025",
+            "carlabeatriz": "cb@passaporte2025",
+            "augustocaldas": "ac@passaporte2025",
+            "elanearaujo": "ea@passaporte2025",
+            "brunadarc": "bd@passaporte2025",
+            "priscilaoliveira": "po@passaporte2025",
+            "anarodrigues": "ar@passaporte2025",
+            "fhylipebrandao": "fb@passaporte2025",
+            "nathalyasibele": "ns@passaporte2025",
+            "magnosantos": "ms@passaporte2025" // Novo login
         };
-        if(goalChart) goalChart.destroy();
-        goalChart = new Chart(document.getElementById('goal-chart'), createChartConfig(goalData, `${goalProgress.toFixed(0)}%`));
-        
-        // Conversion Chart
-        const conversionRate = visits > 0 ? (achieved / visits) * 100 : 0;
-        conversionDetailsText.textContent = `(${achieved} matrículas de ${visits} visitas)`;
-        const conversionData = {
-            labels: ['Matrículas', 'Visitas sem Matrícula'],
-            datasets: [{
-                data: [achieved, Math.max(0, visits - achieved)],
-                backgroundColor: ['#16a34a', '#334155'],
-                borderColor: isDark ? '#0f172a' : '#f1f5f9',
-                borderWidth: 5,
-                hoverOffset: 4
-            }]
-        };
-        if(conversionChart) conversionChart.destroy();
-        conversionChart = new Chart(document.getElementById('conversion-chart'), createChartConfig(conversionData, `${conversionRate.toFixed(1)}%`));
 
-        // Closing Chart
-        const closingRate = visits > 0 ? (closings / visits) * 100 : 0;
-        closingDetailsText.textContent = `(${closings} atendimentos de ${visits} visitas)`;
-        const closingData = {
-            labels: ['Concluídos', 'Não Concluídos'],
-            datasets: [{
-                data: [closings, Math.max(0, visits - closings)],
-                backgroundColor: ['#0d9488', '#334155'],
-                borderColor: isDark ? '#0f172a' : '#f1f5f9',
-                borderWidth: 5,
-                hoverOffset: 4
-            }]
-        };
-        if(closingChart) closingChart.destroy();
-        closingChart = new Chart(document.getElementById('closing-chart'), createChartConfig(closingData, `${closingRate.toFixed(1)}%`));
-    }
+        // --- Elementos do DOM (Login) ---
+        const loginScreen = document.getElementById('login-screen');
+        const mainAppContent = document.getElementById('main-app-content');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
 
-    function createChartConfig(data, centerText) {
-        const isDark = htmlTag.classList.contains('dark');
-        return {
-            type: 'doughnut',
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        enabled: true,
-                        backgroundColor: isDark ? '#334155' : '#475569'
-                    }
-                }
+        // --- Dados das Objeções e Quebras de Objeção (Guia de Argumentos) ---
+        const salesData = [
+            {
+                id: "preco",
+                objection: "O curso é muito caro. / Não tenho condições agora (referindo-se ao valor do curso APÓS o desconto do líder).",
+                rebuttals: [
+                    "Entendo sua preocupação, mesmo com a condição especial que o(a) [Nome do Líder] conseguiu para você. Este valor já reflete um esforço nosso para viabilizar o acesso à qualidade Passaporte Edu. Lembre-se que é um investimento no desenvolvimento completo do(a) seu/sua filho(a), com foco em habilidades essenciais para o futuro.",
+                    "Compreendo. Esta condição especial que apresentamos é realmente o nosso melhor esforço para tornar o curso acessível. Que tal revisarmos as opções de parcelamento que temos para este valor? Muitas vezes, diluindo as parcelas, o investimento se encaixa melhor no orçamento mensal.",
+                    "Percebo que o valor ainda é um ponto. Além do conhecimento técnico, como a chancela Cambridge no inglês, estamos a falar de preparar o(a) [nome do aluno] com tecnologia, educação financeira, empreendedorismo... Habilidades que realmente farão a diferença. Existe alguma forma de ajustarmos o seu planejamento financeiro para não perder esta oportunidade com esta condição única?",
+                    "Entendo. O valor do curso já com o desconto considera toda a estrutura, metodologia e os resultados que proporcionamos. Se o material didático for um ponto adicional agora, podemos focar em garantir a vaga no curso com esta condição e vemos a melhor forma para o material em seguida, que também é essencial."
+                ]
             },
-            plugins: [{
-                id: 'centerText',
-                beforeDraw: function(chart) {
-                    const ctx = chart.ctx;
-                    const centerConfig = {
-                        x: chart.getDatasetMeta(0).data[0].x,
-                        y: chart.getDatasetMeta(0).data[0].y,
-                    };
-                    ctx.save();
-                    ctx.font = 'bold 2rem Inter, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
-                    ctx.fillText(centerText, centerConfig.x, centerConfig.y);
-                    ctx.restore();
-                }
-            }]
-        };
-    }
-    
-    function switchTab(targetId) {
-        contentSections.forEach(section => section.classList.toggle('active', section.id === targetId));
-        tabButtons.forEach(button => {
-            const isTargetButton = button.getAttribute('data-tabs-target') === `#${targetId}`;
-            button.classList.toggle('tab-active', isTargetButton);
-            button.classList.toggle('tab-inactive', !isTargetButton);
-            button.setAttribute('aria-selected', isTargetButton);
-        });
-        if (targetId === 'script-helper') createScriptHelper();
-        if (targetId === 'manual') createManual();
-        if (targetId === 'dashboard') renderDashboard();
-    }
-
-    // =================================================================================
-    // EVENT LISTENERS
-    // =================================================================================
-    if (loginForm) loginForm.addEventListener('submit', handleLogin);
-    if (darkModeToggle) darkModeToggle.addEventListener('change', toggleDarkMode);
-    
-    const personalizerFunction = () => {
-        displayRebuttals(objectionSelect.value);
-        createScriptHelper();
-        createManual();
-    };
-    studentNameInput.addEventListener('input', personalizerFunction);
-    leaderNameInput.addEventListener('input', personalizerFunction);
-    
-    if (objectionSearch) objectionSearch.addEventListener('input', (e) => populateObjections(e.target.value));
-    if (objectionSelect) objectionSelect.addEventListener('change', (e) => displayRebuttals(e.target.value));
-    
-    if (performanceInputs) performanceInputs.addEventListener('input', renderDashboard);
-    if (editNumbersBtn) editNumbersBtn.addEventListener('click', () => {
-        performanceInputsContainer.classList.toggle('hidden');
-    });
-
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            if (!button.classList.contains('cursor-not-allowed')) {
-                const targetId = button.getAttribute('data-tabs-target').substring(1);
-                switchTab(targetId);
+            {
+                id: "tempo",
+                objection: "Meu filho já faz muitas atividades, não sei se terá tempo.",
+                rebuttals: [
+                    "Compreendo que a rotina das crianças hoje é bastante preenchida. Nossos horários são flexíveis e pensados para se encaixarem na rotina escolar. Além disso, o aprendizado aqui é dinâmico e focado, otimizando o tempo que ele(a) passa conosco. Qual seria o melhor dia e horário para vocês?",
+                    "Investir tempo no desenvolvimento de habilidades como inglês, tecnologia ou educação financeira desde cedo é crucial. É um tempo que trará um grande diferencial no futuro dele(a). Podemos verificar juntos qual horário se adaptaria melhor à rotina dele(a)?",
+                    "Muitas das habilidades que ensinamos, como as socioemocionais e de organização, podem até ajudar seu/sua filho(a) a gerir melhor o tempo nas outras atividades. É um ganho de produtividade para a vida!",
+                    "Nossas aulas são de [duração da aula, ex: 1h30] uma ou duas vezes por semana. É um investimento de tempo pequeno perto do grande benefício que trará."
+                ]
+            },
+            {
+                id: "desconhecimento",
+                objection: "Não conheço a Passaporte Edu muito bem. / Essa escola é nova?",
+                rebuttals: [
+                    "A Passaporte Edu é uma escola de habilidades consolidada, com diversas unidades e milhares de alunos satisfeitos. Somos reconhecidos, por exemplo, pela chancela de centro preparatório para os testes de proficiência de Cambridge no nosso curso de inglês, um selo de qualidade internacional.",
+                    "Nosso foco é em habilidades do futuro: tecnologia, educação financeira, empreendedorismo, inglês e socioemocional. Nossa metodologia é inovadora e já transformou a vida de muitos jovens, preparando-os para serem líderes e protagonistas de suas histórias.",
+                    "Convidamos você a conhecer nossas instalações, nossa equipe pedagógica e, se possível, conversar com outros pais. Temos muito orgulho do nosso trabalho e dos resultados que nossos alunos alcançam. Qual o maior receio em relação a uma escola que ainda não conhece bem?",
+                    "Somos uma rede de escolas de habilidades com um compromisso de democratizar o aprendizado de habilidades valiosas, oferecendo educação de excelência."
+                ]
+            },
+            {
+                id: "gostar",
+                objection: "Será que meu filho vai gostar? / Ele é muito tímido(a) ou agitado(a) para isso.",
+                rebuttals: [
+                    "Nossa metodologia é pensada para ser envolvente e adaptada a diferentes perfis de alunos. Temos turmas reduzidas e professores capacitados para dar atenção individualizada e estimular a participação de todos, respeitando o ritmo de cada um.",
+                    "Para crianças mais tímidas, nossos cursos de habilidades socioemocionais e oratória (speech) são excelentes para desenvolver a confiança e a comunicação. Para os mais agitados, as aulas de tecnologia e coding, por exemplo, podem ser uma forma fantástica de canalizar essa energia de forma criativa e produtiva.",
+                    "Oferecemos uma aula experimental ou uma visita monitorada para que ele(a) possa ter um primeiro contato e sentir como é o ambiente e a dinâmica das aulas. Que tal agendarmos para que ele(a) mesmo(a) possa nos dizer o que achou?",
+                    "Nossos professores são especialistas em criar um ambiente de aprendizado positivo e estimulante, onde cada aluno se sente acolhido e motivado a aprender e interagir."
+                ]
+            },
+            {
+                id: "experiencia_negativa",
+                objection: "Já tentei outros cursos e não deu certo. / Tenho receio de não ter resultado.",
+                rebuttals: [
+                    "Entendo sua preocupação, e é por isso que na Passaporte Edu focamos em uma metodologia diferenciada e resultados concretos. O que especificamente não funcionou nas experiências anteriores? Assim posso mostrar como nosso método aborda isso de forma diferente e mais eficaz.",
+                    "Nossos cursos de inglês, por exemplo, preparam para certificações de Cambridge, um reconhecimento internacional da proficiência do aluno. Isso demonstra um resultado tangível.",
+                    "Trabalhamos com o desenvolvimento de habilidades práticas e aplicáveis, como educação financeira e empreendedorismo, que os alunos veem utilidade no dia a dia e para o futuro. Não é apenas teoria, é aprendizado para a vida.",
+                    "Nosso acompanhamento pedagógico é próximo, e estamos sempre atentos à evolução de cada aluno. Nosso compromisso é com o sucesso e o desenvolvimento dele(a). Podemos mostrar alguns depoimentos de alunos que tinham receios parecidos e hoje estão muito satisfeitos?"
+                ]
+            },
+            {
+                id: "pensar",
+                objection: "Vou pensar e depois retorno.",
+                rebuttals: [
+                    "Compreendo que é uma decisão importante. Para que possa tomar a melhor decisão para o(a) [nome do filho/filha] agora, qual é o principal ponto que ainda precisa de esclarecimento ou que o(a) impede de seguirmos em frente com esta oportunidade hoje?",
+                    "Muitas vezes, quando deixamos para depois, outras prioridades surgem e uma oportunidade como esta pode passar. O que precisamente o(a) faria sentir-se 100% seguro(a) para garantirmos a vaga do(a) [nome do filho/filha] ainda hoje, aproveitando as condições que conversamos?",
+                    "Entendo. No entanto, as nossas turmas têm vagas limitadas para garantir a qualidade do ensino que prezamos. Se houver algo que eu possa fazer ou alguma informação adicional que possa fornecer para ajudar na sua decisão agora, por favor, me diga. Queremos muito ter o(a) [nome do filho/filha] connosco.",
+                    "Percebo que precisa de um momento. Enquanto isso, que tal se revisarmos rapidamente os principais benefícios que o(a) [nome do filho/filha] terá ao iniciar o curso? Às vezes, recapitular ajuda a solidificar a decisão. Qual foi o ponto que mais lhe chamou a atenção até agora?"
+                ]
+            },
+            {
+                id: "material_didatico",
+                objection: "Este material didático é obrigatório mesmo? / Não sabia deste valor adicional do material (APÓS pré-matrícula).",
+                rebuttals: [
+                    "Sim, o material didático é uma parte fundamental e integrada ao nosso método de ensino, por isso é obrigatório. Ele foi cuidadosamente desenvolvido por especialistas para que o(a) [nome do aluno] possa acompanhar as aulas, realizar as atividades práticas e ter todo o suporte para consolidar o aprendizado. Sem ele, o aproveitamento do curso que acabamos de garantir para o(a) [nome do aluno] não seria o mesmo.",
+                    "Entendo. O valor do material reflete a qualidade e a abrangência do conteúdo, que é exclusivo e alinhado com os objetivos do curso. É um investimento direto na experiência e aprendizado do(a) [nome do aluno]. O pagamento integral do material é necessário agora para que ele(a) já comece com todos os recursos.",
+                    "Compreendo. O material é essencial para o progresso no curso. Se o pagamento integral do material estiver complicado neste exato momento, posso conversar com o(a) [Nome do Líder] para vermos se, como ÚLTIMO RECURSO, seria possível iniciar com o pagamento do material inicial. Mas o ideal é o completo para o melhor aproveitamento desde o início. Qual seria a sua maior dificuldade agora em relação ao pagamento do material completo?",
+                    "Pense no material como o conjunto de ferramentas indispensáveis para o(a) [nome do aluno] construir o conhecimento no curso. É um investimento para garantir o sucesso dele(a). Lembre-se que a primeira parcela do curso em si é só daqui a 30 dias."
+                ]
+            },
+            {
+                id: "marido",
+                objection: "Tenho que falar com meu marido.",
+                rebuttals: [
+                    "Entendo que decisões importantes são melhores quando compartilhadas. No entanto, Sra. [Nome], a senhora, como mãe, tem uma visão e um poder de decisão incríveis sobre o futuro do(a) [nome do aluno]. Esta oportunidade, com as condições especiais que o(a) [Nome do Líder] apresentou, é para hoje. A pré-matrícula garante essa condição sem nenhum custo para o curso agora, e a primeira parcela é só daqui a 30 dias. Que tal a senhora tomar essa decisão de impacto, garantindo o melhor para o(a) [nome do aluno], e depois compartilhar com ele essa conquista?",
+                    "Compreendo, Sra. [Nome]. Muitas mães que nos visitam, mulheres fortes e decididas como a senhora, reconhecem o momento certo de investir no futuro dos filhos. Confie na sua intuição e no que viu aqui. A condição especial do curso é para agora, a primeira parcela só em 30 dias, e não há custo de matrícula para o curso. O investimento imediato seria apenas no material didático. Por que não garantir essa oportunidade única para o(a) [nome do aluno] hoje mesmo?",
+                    "É ótimo que valorize a opinião do seu marido. Tenho certeza que ele apoiará uma decisão que trará tantos benefícios para o(a) [nome do aluno]. Como a condição especial do curso é para fechamento hoje e a primeira parcela só vence em 30 dias, a senhora pode assegurar essa vantagem agora. Permita-se tomar essa decisão empoderada pelo futuro do seu filho, e depois comunique a ele essa excelente notícia.",
+                    "Sra. [Nome], percebo o quanto a senhora se importa com o desenvolvimento do(a) [nome do aluno] e o quanto valorizou nossa proposta. A decisão de uma mãe, pensando no melhor para o filho, é muito poderosa e tem um peso enorme. Esta condição especial do curso é válida para hoje. Que tal aproveitarmos para já deixar a pré-matrícula feita, sem custo para o curso neste momento, e a senhora conversa com ele sobre o material didático, que é o próximo passo, já com a vaga garantida?"
+                ]
+            },
+            {
+                id: "distancia",
+                objection: "A distância é um problema.",
+                rebuttals: [
+                    "Entendo que a distância pode ser uma consideração. No entanto, muitos pais vêm de diversas partes da cidade porque reconhecem o valor e os diferenciais que a Passaporte Edu oferece, como [mencionar 1-2 diferenciais chave, ex: chancela Cambridge, foco em tecnologia]. O tempo investido no trajeto é pequeno perto do grande futuro que estamos a construir para o(a) [nome do aluno].",
+                    "Compreendo sua preocupação com o deslocamento. Já verificou as opções de transporte público para cá? Temos também [mencionar se há facilidades como estacionamento, horários flexíveis que ajudam com o trânsito, etc.]. Além disso, a qualidade do nosso ensino e a preparação que oferecemos fazem valer a pena cada minuto.",
+                    "Muitos dos nossos alunos aproveitam o tempo de deslocamento para revisar o conteúdo ou ouvir algo produtivo. Pense nisso como um investimento de tempo que trará um retorno imenso para o desenvolvimento do(a) [nome do aluno].", 
+                    "Entendo. Apenas [X] vezes por semana, o(a) [nome do aluno] terá acesso a um ambiente de aprendizado único que o(a) preparará para o futuro. Será que o benefício de um ensino de excelência como o nosso não compensa o esforço do deslocamento?"
+                ]
+            },
+            {
+                id: "desempregada",
+                objection: "Estou desempregada.",
+                rebuttals: [
+                    "Entendo perfeitamente que este é um momento delicado e que o orçamento está mais apertado. É justamente por pensar no futuro e na importância de uma boa preparação para o(a) [nome do aluno] que muitos pais, mesmo em situações desafiadoras, fazem um esforço. Este curso pode ser a chave para abrir portas para ele(a) no futuro, trazendo mais segurança para toda a família.",
+                    "Compreendo sua situação e quero ajudar. Lembre-se que a primeira parcela do curso é só daqui a 30 dias, e não há taxa de matrícula para o curso em si. Isso te daria um fôlego para se organizar. O investimento inicial seria apenas no material didático, que é essencial. O conhecimento que o(a) [nome do aluno] adquirirá aqui pode ser um grande diferencial para que ele(a) tenha um futuro profissional promissor.",
+                    "Sinto muito por este momento. Investir na educação dos filhos, mesmo quando as coisas estão difíceis, é plantar uma semente para um futuro melhor. As habilidades que o(a) [nome do aluno] desenvolverá aqui, como [mencionar habilidade relevante, ex: empreendedorismo, tecnologia], podem inclusive inspirar novas oportunidades para toda a família. O(A) [Nome do Líder] já ofereceu uma condição especial para o curso. Para o material, podemos ver a melhor forma de pagamento para você.",
+                    "Entendo que a prioridade é a estabilidade. No entanto, a educação de qualidade é um dos maiores legados que podemos deixar. Que tal garantirmos a vaga com a pré-matrícula, sem custos agora para o curso, e focamos em viabilizar o material didático? A primeira parcela do curso é só para daqui a 30 dias."
+                ]
+            },
+            {
+                id: "desconfianca_escolas",
+                objection: "Já ouvi falar de outras escolas que prometem muito e não cumprem.",
+                rebuttals: [
+                    "Entendo completamente sua cautela, Sra. [Nome do Responsável]. É muito importante escolher bem onde investir na educação do seu filho. Na Passaporte Edu, prezamos pela transparência e pelos resultados. Por isso, temos a chancela de Centro Preparatório Cambridge, um selo internacional que poucas escolas têm, e milhares de alunos satisfeitos que comprovam a qualidade do nosso método.",
+                    "Compreendo o seu receio. O que nos diferencia é o nosso compromisso real com o desenvolvimento de cada aluno. Convidamos você a conversar com outros pais de alunos nossos, ou até mesmo agendar uma aula experimental para o(a) [nome do aluno], para que vocês vejam na prática a nossa seriedade e a qualidade do que oferecemos.",
+                    "É verdade que existem muitas promessas no mercado. Por isso, focamos em diferenciais concretos: metodologia inovadora, professores qualificados e um currículo voltado para as habilidades que o futuro exige. O nosso maior marketing são os resultados dos nossos alunos. O que especificamente a senhora ouviu que a deixou com essa impressão?",
+                    "Entendo sua preocupação. Na Passaporte Edu, preferimos mostrar a entregar. Nossa reputação é construída sobre a satisfação das famílias que confiam em nós. Que tal conhecer um pouco mais sobre os projetos desenvolvidos por nossos alunos e os depoimentos de quem já passou por aqui?" 
+                ]
+            },
+            {
+                id: "situacao_economica",
+                objection: "Com a situação atual, é difícil investir em algo a mais.",
+                rebuttals: [
+                    "Compreendo perfeitamente, Sra. [Nome do Responsável]. A situação econômica exige que a gente pense bem em cada investimento. E é exatamente por isso que investir na educação e no preparo do(a) [nome do aluno] se torna ainda mais crucial. Um bom preparo hoje é a garantia de mais oportunidades e segurança para ele(a) no futuro, independentemente do cenário.",
+                    "Entendo o seu ponto. Muitos pais compartilham dessa preocupação. No entanto, acreditamos que a educação de qualidade não é um 'algo a mais', mas sim um investimento essencial, especialmente em tempos desafiadores. As habilidades que ele(a) desenvolverá aqui, como [mencionar 1-2 habilidades], são valiosas em qualquer contexto econômico. E lembre-se, a primeira parcela do curso é só daqui a 30 dias.",
+                    "Sei que o orçamento familiar precisa ser cuidadosamente gerenciado. Por isso, o(a) [Nome do Líder] ofereceu essa condição especial para o curso. Pense neste curso como uma forma de blindar o futuro do(a) [nome do aluno], tornando-o(a) mais competitivo(a) e preparado(a) para superar qualquer desafio. Que tal aproveitarmos essa condição para não adiar esse passo importante?",
+                    "É justamente em momentos como este que precisamos focar no que realmente trará retorno a longo prazo. A educação do(a) [nome do aluno] é um desses investimentos. Com as habilidades desenvolvidas aqui, ele(a) estará mais preparado(a) para um mercado de trabalho exigente e para criar as próprias oportunidades."
+                ]
+            },
+            {
+                id: "mercado_trabalho_local", 
+                objection: "Será que o curso realmente prepara para o mercado de trabalho daqui?",
+                rebuttals: [
+                    "Excelente pergunta, Sra. [Nome do Responsável]! As habilidades que ensinamos na Passaporte Edu, como inglês fluente, domínio de tecnologia, pensamento crítico e empreendedorismo, são universais e altamente valorizadas em qualquer mercado, que está em constante crescimento e buscando profissionais qualificados.",
+                    "Com certeza! Preparamos nossos alunos não apenas com conhecimento técnico, mas com as chamadas 'soft skills', que são essenciais para se destacar profissionalmente aqui ou em qualquer lugar. Além disso, cursos como o de [mencionar curso relevante, ex: Empreendedorismo] podem até inspirá-lo(a) a criar oportunidades aqui mesmo na nossa cidade.",
+                    "Entendemos a importância de preparar os jovens para a realidade local e global. Muitos dos nossos ex-alunos estão se destacando em empresas e iniciativas diversas. O nosso foco em [mencionar diferencial, ex: tecnologia e inovação] está totalmente alinhado com as tendências do mercado de trabalho atual.",
+                    "Sim, e vamos além! Enquanto algumas formações podem ser muito específicas, as habilidades que desenvolvemos aqui abrem um leque de opções. O(A) [nome do aluno] estará preparado(a) para o mercado local e também para oportunidades que possam surgir em outros lugares, caso seja o desejo dele(a) no futuro. A chancela Cambridge, por exemplo, é um diferencial reconhecido globalmente."
+                ]
+            },
+            {
+                id: "sem_cartao_limite_material",
+                objection: "Não tenho cartão / Não tenho limite no cartão (para o material didático).",
+                rebuttals: [
+                    "Entendo, Sra. [Nome]. O material didático é essencial para que o(a) [nome do aluno] comece o curso com tudo. Além do cartão, aceitamos pagamento via PIX ou em dinheiro aqui na escola. Alguma dessas opções facilitaria para a senhora hoje para o material?",
+                    "Compreendo. Para o material didático, que é o investimento necessário para o início imediato, podemos verificar se há possibilidade de dividir o valor em [X vezes, se a política da escola permitir] no cartão, ou se uma parte no débito e outra no crédito ajudaria? O importante é não perder a condição do curso que já garantimos. Lembre-se que a primeira parcela do curso em si é só daqui a 30 dias.",
+                    "Sei que imprevistos acontecem com cartões. O material é crucial. Existe alguém, talvez um familiar ou amigo, que poderia realizar o pagamento do material via PIX ou no cartão para a senhora, e vocês se acertam depois? É um investimento importante no futuro do(a) [nome do aluno].",
+                    "Entendo a situação com o cartão. Como uma alternativa final, e para não perder a vaga e as condições do curso, o(a) [Nome do Líder] pode analisar se conseguimos liberar a matrícula com o pagamento apenas do material inicial hoje. O restante do material precisaria ser adquirido o mais breve possível. Seria uma possibilidade para a senhora?"
+                ]
+            },
+            {
+                id: "pagar_material_depois",
+                objection: "Só posso pagar o material no próximo mês / Não tenho o dinheiro do material agora.",
+                rebuttals: [
+                    "Entendo, Sra. [Nome]. O ideal seria que o(a) [nome do aluno] já começasse com o material completo para não perder nada desde a primeira aula, e a aquisição do material está vinculada à efetivação da matrícula com as condições especiais que o(a) [Nome do Líder] aprovou. Será que não conseguiria priorizar este investimento no futuro dele(a) para hoje?",
+                    "Compreendo a sua programação financeira. No entanto, para mantermos a vaga e as condições especiais do curso, o pagamento do material é necessário agora. Não há como adiar o início do curso sem ele. Existe alguma possibilidade de antecipar esse valor, talvez com a ajuda de alguém?",
+                    "Para que o(a) [nome do aluno] não perca esta oportunidade e comece já, o material didático precisa ser adquirido. Se o valor total do material está complicado agora, e como um esforço final para não perder a vaga e as condições do curso, o(a) [Nome do Líder] poderia analisar a possibilidade de um pagamento apenas do material inicial hoje. O restante precisaria ser quitado em [prazo curto definido pela escola]. Seria viável para a senhora?",
+                    "Entendo. A primeira parcela do curso é só daqui a 30 dias, o que já dá um alívio. O material é o que garante o início imediato. Se o valor total do material é o impeditivo hoje, e como ÚLTIMO RECURSO, o(a) [Nome do Líder] pode verificar a possibilidade de iniciar com o pagamento do material inicial. Isso ajudaria?"
+                ]
             }
-        });
-    });
+        ];
 
-    // =================================================================================
-    // INICIALIZAÇÃO DA APLICAÇÃO
-    // =================================================================================
-    if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
-    populateObjections();
-    createManual();
-    createScriptHelper();
-    renderDashboard(); // Initial render for dashboard
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedDarkMode = localStorage.getItem('darkMode');
-    applyDarkMode(savedDarkMode === null ? prefersDark : JSON.parse(savedDarkMode));
-});
-</script>
+        // --- Elementos do DOM (Guia de Argumentos) ---
+        const objectionSelect = document.getElementById('objection-select');
+        const rebuttalsContainer = document.getElementById('rebuttals-container');
+        const selectedObjectionContainer = document.getElementById('selected-objection-container');
+        const selectedObjectionText = document.getElementById('selected-objection-text');
+        const rebuttalsTitle = document.getElementById('rebuttals-title');
+        const currentYearSpan = document.getElementById('currentYear');
+
+        // --- Elementos do DOM (Abas) ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentSections = document.querySelectorAll('.content-section');
+        const readmeCeoNavItem = document.getElementById('readme-ceo-nav-item');
+
+
+        // --- Funções (Login) ---
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = loginForm.username.value.trim().toLowerCase(); 
+            const password = loginForm.password.value;
+
+            if (readmeCeoNavItem) readmeCeoNavItem.classList.add('hidden');
+
+            if (validUsers[username] && validUsers[username] === password) {
+                loginScreen.classList.add('hidden');
+                mainAppContent.classList.remove('hidden');
+                document.body.classList.remove('justify-center');
+                document.body.classList.add('justify-start', 'pt-6', 'md:pt-10');
+                if (loginError) loginError.classList.add('hidden');
+
+                if (username === 'douglaspeixoto') {
+                    if (readmeCeoNavItem) readmeCeoNavItem.classList.remove('hidden');
+                }
+                const firstVisibleTabButton = document.querySelector('.tab-button:not(.hidden)');
+                if (firstVisibleTabButton) {
+                    switchTab(firstVisibleTabButton.getAttribute('data-tabs-target').substring(1));
+                }
+
+            } else {
+                if (loginError) {
+                    loginError.textContent = 'Utilizador ou senha inválidos.';
+                    loginError.classList.remove('hidden');
+                }
+            }
+        }
+
+        // --- Funções (Guia de Argumentos) ---
+        function populateObjections() {
+            if (!objectionSelect) return; 
+            salesData.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = item.objection;
+                objectionSelect.appendChild(option);
+            });
+        }
+
+        function displayRebuttals(objectionId) {
+            if (!rebuttalsContainer || !selectedObjectionContainer || !selectedObjectionText || !rebuttalsTitle) return; 
+
+            rebuttalsContainer.innerHTML = '';
+
+            if (!objectionId) {
+                rebuttalsTitle.classList.add('hidden');
+                selectedObjectionContainer.classList.add('hidden');
+                return;
+            }
+
+            const selectedData = salesData.find(item => item.id === objectionId);
+
+            if (selectedData) {
+                selectedObjectionText.textContent = selectedData.objection;
+                selectedObjectionContainer.classList.remove('hidden');
+                rebuttalsTitle.classList.remove('hidden');
+
+                selectedData.rebuttals.forEach((rebuttal) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-slate-50 p-4 md:p-5 rounded-lg shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow duration-200';
+                    
+                    const content = document.createElement('p');
+                    content.className = 'text-slate-700 text-sm md:text-base leading-relaxed';
+                    content.textContent = rebuttal;
+                    
+                    card.appendChild(content);
+                    rebuttalsContainer.appendChild(card);
+                });
+            } else {
+                rebuttalsTitle.classList.add('hidden');
+                selectedObjectionContainer.classList.add('hidden');
+            }
+        }
+
+        // --- Funções (Abas) ---
+        function switchTab(targetId) {
+            contentSections.forEach(section => {
+                if (section.id === targetId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            
+            const visibleTabButtons = document.querySelectorAll('.tab-button:not(.hidden)'); 
+            visibleTabButtons.forEach(button => {
+                if (button.getAttribute('data-tabs-target') === `#${targetId}`) {
+                    button.classList.remove('tab-inactive');
+                    button.classList.add('tab-active');
+                    button.setAttribute('aria-selected', 'true');
+                } else {
+                    button.classList.remove('tab-active');
+                    button.classList.add('tab-inactive');
+                    button.setAttribute('aria-selected', 'false');
+                }
+            });
+        }
+
+        // --- Event Listeners ---
+        if (loginForm) {
+            loginForm.addEventListener('submit', handleLogin);
+        }
+
+        if (objectionSelect) { 
+            objectionSelect.addEventListener('change', (event) => {
+                displayRebuttals(event.target.value);
+            });
+        }
+        
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (!button.parentElement.classList.contains('hidden')) {
+                    const targetId = button.getAttribute('data-tabs-target').substring(1); 
+                    switchTab(targetId);
+                }
+            });
+        });
+
+
+        // --- Inicialização ---
+        populateObjections(); 
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+        
+    </script>
 </body>
 </html>
